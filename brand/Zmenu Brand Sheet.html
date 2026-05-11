@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zmenu — Brand Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy:#01406D; --teal:#01B4BA; --orange:#FF7A0F; --ice:#F5FEFE;
+    --line:#E3EEF1; --ink:#0E1B26; --ink2:#5A6B78; --ink3:#92A1AE;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:#EEF6F7; font-family:"Inter",system-ui,sans-serif; -webkit-font-smoothing:antialiased; color:var(--ink); }
+  .wrap { max-width:1280px; margin:0 auto; padding:56px 40px 80px; }
+
+  .crumb { font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:1px; color:var(--teal); font-weight:700; text-transform:uppercase; margin-bottom:8px; }
+  h1 { font-family:"Be Vietnam Pro",sans-serif; font-weight:800; font-size:44px; letter-spacing:-0.8px; color:var(--navy); margin:0 0 8px; line-height:1; }
+  .lead { font-size:14px; color:var(--ink2); max-width:640px; line-height:1.55; margin:0; }
+
+  .grid { display:grid; gap:14px; margin-top:24px; }
+  .row-2 { grid-template-columns: 1.4fr 1fr; }
+  .row-3 { grid-template-columns: repeat(3,1fr); }
+  .row-4 { grid-template-columns: repeat(4,1fr); }
+  @media (max-width: 880px) {
+    .row-2,.row-3,.row-4 { grid-template-columns:1fr; }
+  }
+
+  .panel { background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px; }
+  .panel.dark { background:var(--navy); color:#fff; border:none; }
+  .panel.ice { background:var(--ice); }
+  .panel-title { font-family:"Be Vietnam Pro",sans-serif; font-weight:700; font-size:13px; color:var(--ink); margin:0 0 12px; letter-spacing:0.3px; text-transform:uppercase; }
+  .panel.dark .panel-title { color:rgba(255,255,255,0.7); }
+
+  .stage { padding:36px 24px; display:flex; align-items:center; justify-content:center; min-height:200px; }
+
+  h2 { font-family:"Be Vietnam Pro",sans-serif; font-size:18px; font-weight:700; color:var(--ink); margin:48px 0 4px; letter-spacing:-0.2px; }
+  h2 .num { font-family:ui-monospace,Menlo,monospace; font-size:11px; color:var(--teal); margin-right:10px; font-weight:700; vertical-align:2px; }
+  h2 + .desc { font-size:13px; color:var(--ink2); margin:0 0 14px; max-width:680px; line-height:1.55; }
+
+  .swatch-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media (max-width:880px) { .swatch-row { grid-template-columns:repeat(2,1fr); } }
+  .swatch { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .swatch .chip { width:100%; height:80px; border-radius:8px; }
+  .swatch b { display:block; font-family:"Be Vietnam Pro",sans-serif; font-weight:700; font-size:13px; color:var(--ink); margin-top:10px; }
+  .swatch span { font-family:ui-monospace,Menlo,monospace; font-size:10.5px; color:var(--ink2); display:block; margin-top:2px; }
+  .swatch em { font-style:normal; font-size:10.5px; color:var(--ink3); display:block; margin-top:6px; line-height:1.5; }
+
+  .scale-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media (max-width:880px) { .scale-row { grid-template-columns:repeat(2,1fr); } }
+  .scale { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 14px; display:flex; flex-direction:column; align-items:center; gap:14px; min-height:160px; }
+  .scale .pad { flex:1; display:flex; align-items:center; justify-content:center; width:100%; }
+  .scale b { font-family:"Be Vietnam Pro",sans-serif; font-weight:700; font-size:12px; }
+  .scale span { font-family:ui-monospace,Menlo,monospace; font-size:10px; color:var(--ink3); }
+
+  .donts { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media (max-width:880px) { .donts { grid-template-columns:1fr; } }
+  .dont { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; position:relative; min-height:140px; }
+  .dont .tag { display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:5px; }
+  .dont.no .tag { background:#FCE4E4; color:#C2272D; }
+  .dont.yes .tag { background:#E8F8EE; color:#16A34A; }
+  .dont .pad { display:flex; align-items:center; justify-content:center; padding:18px 0 6px; min-height:80px; }
+  .dont em { font-style:normal; font-size:11.5px; color:var(--ink2); display:block; }
+
+  .ctx-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media (max-width:880px) { .ctx-grid { grid-template-columns:1fr; } }
+  .ctx { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .ctx-canvas { padding:24px; display:flex; align-items:center; justify-content:center; min-height:160px; }
+  .ctx-meta { padding:12px 14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink2); }
+  .ctx-meta b { display:block; color:var(--ink); font-family:"Be Vietnam Pro",sans-serif; font-weight:700; font-size:12.5px; margin-bottom:1px; }
+
+  /* clear-space drawing */
+  .cs-stage { position:relative; padding:48px 56px; background:#fff; border:1px solid var(--line); border-radius:12px; display:flex; align-items:center; justify-content:center; }
+  .cs-overlay { position:absolute; inset:0; pointer-events:none; }
+
+  .typo-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:880px) { .typo-row { grid-template-columns:1fr; } }
+  .type-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:20px; }
+  .type-name { font-size:11px; font-weight:700; color:var(--teal); letter-spacing:0.6px; text-transform:uppercase; }
+  .type-fam { font-family:"Be Vietnam Pro",sans-serif; font-weight:800; font-size:28px; color:var(--ink); margin:6px 0 10px; letter-spacing:-0.5px; }
+  .type-fam.inter { font-family:"Inter",sans-serif; font-weight:700; }
+  .type-spec { display:flex; flex-direction:column; gap:6px; }
+  .type-spec span { font-size:14px; color:var(--ink); font-weight:600; }
+  .type-spec span small { font-family:ui-monospace,Menlo,monospace; font-size:10px; color:var(--ink3); margin-left:8px; font-weight:500; }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="crumb">Brand Sheet · v1</div>
+  <h1>Zmenu — Logo &amp; Identity</h1>
+  <p class="lead">
+    Phương án A · Wordmark + Icon. Bộ guideline tối thiểu cho app, web, in ấn — palette, typography, scale, clear-space, do/don't, ứng dụng thực tế.
+  </p>
+
+  <!-- ─── 1. PRIMARY MARKS ─────────────────────────────── -->
+  <h2><span class="num">01</span>Primary marks</h2>
+  <p class="desc">Một logo chính, hai biến thể nền. Mark có thể đứng độc lập làm app icon.</p>
+
+  <div class="grid row-2">
+    <div class="panel ice">
+      <div class="panel-title">Light · #F5FEFE</div>
+      <div class="stage">
+        <svg width="380" height="100" viewBox="0 0 380 100" fill="none" aria-label="Zmenu">
+          <rect x="6"  y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6"  y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="6"  y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+        </svg>
+      </div>
+    </div>
+    <div class="panel dark">
+      <div class="panel-title">Dark · #01406D</div>
+      <div class="stage">
+        <svg width="280" height="80" viewBox="0 0 380 100" fill="none" aria-label="Zmenu">
+          <rect x="6"  y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6"  y="44" width="78" height="12" rx="3" fill="#F5FEFE"/>
+          <rect x="6"  y="66" width="48" height="12" rx="3" fill="#F5FEFE"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#F5FEFE">Zmenu</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. CONSTRUCTION & CLEAR SPACE ────────────────── -->
+  <h2><span class="num">02</span>Construction &amp; clear-space</h2>
+  <p class="desc">Đơn vị X = chiều cao thanh menu. Vùng cách ly tối thiểu = 1X xung quanh logo.</p>
+
+  <div class="cs-stage">
+    <svg width="560" height="180" viewBox="0 0 560 180" fill="none">
+      <!-- guides -->
+      <rect x="20" y="40" width="510" height="100" rx="6" stroke="#01B4BA" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.7"/>
+      <!-- corners -->
+      <g stroke="#01B4BA" stroke-width="1" opacity="0.6">
+        <line x1="0" y1="40" x2="20" y2="40"/>
+        <line x1="0" y1="140" x2="20" y2="140"/>
+        <line x1="540" y1="40" x2="560" y2="40"/>
+        <line x1="540" y1="140" x2="560" y2="140"/>
+      </g>
+      <text x="6" y="36" font-family="ui-monospace, Menlo, monospace" font-size="9" fill="#01B4BA">1X</text>
+      <text x="540" y="36" font-family="ui-monospace, Menlo, monospace" font-size="9" fill="#01B4BA">1X</text>
+      <!-- logo -->
+      <g transform="translate(40,52)">
+        <rect x="0"  y="2"  width="60" height="12" rx="3" fill="#01B4BA"/>
+        <rect x="0"  y="24" width="78" height="12" rx="3" fill="#01406D"/>
+        <rect x="0"  y="46" width="48" height="12" rx="3" fill="#01406D"/>
+        <circle cx="86" cy="52" r="5" fill="#FF7A0F"/>
+        <text x="112" y="50" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+      </g>
+      <!-- X marker on first bar -->
+      <g stroke="#FF7A0F" stroke-width="1" opacity="0.9">
+        <line x1="200" y1="54" x2="220" y2="54"/>
+        <line x1="200" y1="66" x2="220" y2="66"/>
+        <line x1="210" y1="54" x2="210" y2="66"/>
+      </g>
+      <text x="225" y="64" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#FF7A0F" font-weight="700">X = 12</text>
+    </svg>
+  </div>
+
+  <!-- ─── 3. SCALE & SIZING ────────────────────────────── -->
+  <h2><span class="num">03</span>Scale &amp; sizing</h2>
+  <p class="desc">Min lockup width: 96px. Min mark size: 24px (vẫn đọc được 3 thanh).</p>
+
+  <div class="scale-row">
+    <div class="scale">
+      <div class="pad">
+        <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
+          <rect x="10" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="10" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="10" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="96" cy="72" r="5" fill="#FF7A0F"/>
+        </svg>
+      </div>
+      <b>Mark · 24px</b><span>min size</span>
+    </div>
+    <div class="scale">
+      <div class="pad">
+        <svg width="36" height="36" viewBox="0 0 100 100" fill="none">
+          <rect x="10" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="10" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="10" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="96" cy="72" r="5" fill="#FF7A0F"/>
+        </svg>
+      </div>
+      <b>Mark · 36px</b><span>app icon</span>
+    </div>
+    <div class="scale">
+      <div class="pad">
+        <svg width="180" height="48" viewBox="0 0 380 100" fill="none">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+        </svg>
+      </div>
+      <b>Lockup · 96px</b><span>min lockup</span>
+    </div>
+    <div class="scale">
+      <div class="pad">
+        <svg width="320" height="84" viewBox="0 0 380 100" fill="none">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+        </svg>
+      </div>
+      <b>Lockup · 320px</b><span>marketing</span>
+    </div>
+  </div>
+
+  <!-- ─── 4. COLOR ─────────────────────────────────────── -->
+  <h2><span class="num">04</span>Color tokens</h2>
+  <p class="desc">Bốn màu, dùng đúng vai trò. Không tạo gradient, không thay sắc độ.</p>
+
+  <div class="swatch-row">
+    <div class="swatch">
+      <div class="chip" style="background:#01406D"></div>
+      <b>Navy</b><span>#01406D</span>
+      <em>Primary text · header · structure</em>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#01B4BA"></div>
+      <b>Teal</b><span>#01B4BA</span>
+      <em>Accent · highlight · CTAs phụ</em>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#FF7A0F"></div>
+      <b>Orange</b><span>#FF7A0F</span>
+      <em>CTA chính · giá · flash</em>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background:#F5FEFE; border:1px solid var(--line)"></div>
+      <b>Ice</b><span>#F5FEFE</span>
+      <em>Background · canvas · reverse text</em>
+    </div>
+  </div>
+
+  <!-- ─── 5. TYPOGRAPHY ────────────────────────────────── -->
+  <h2><span class="num">05</span>Typography</h2>
+  <p class="desc">Be Vietnam Pro cho heading + brand · Inter cho body + UI.</p>
+
+  <div class="typo-row">
+    <div class="type-card">
+      <div class="type-name">Heading · Brand</div>
+      <div class="type-fam">Be Vietnam Pro</div>
+      <div class="type-spec">
+        <span>Bold 800 — Wordmark<small>logo only</small></span>
+        <span>Bold 700 — Headlines<small>H1–H3</small></span>
+        <span style="font-weight:600">SemiBold 600 — UI titles<small>cards, buttons</small></span>
+      </div>
+    </div>
+    <div class="type-card">
+      <div class="type-name">Body · UI</div>
+      <div class="type-fam inter">Inter</div>
+      <div class="type-spec">
+        <span style="font-family:Inter; font-weight:600">SemiBold 600 — Labels<small>chips, inputs</small></span>
+        <span style="font-family:Inter; font-weight:500">Medium 500 — Body emphasis<small>13–15</small></span>
+        <span style="font-family:Inter; font-weight:400">Regular 400 — Body<small>13–15</small></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 6. DO / DON'T ────────────────────────────────── -->
+  <h2><span class="num">06</span>Do / Don't</h2>
+  <p class="desc">Giữ tỉ lệ, màu, không thêm hiệu ứng.</p>
+
+  <div class="donts">
+    <div class="dont yes">
+      <span class="tag">✓ Do</span>
+      <div class="pad">
+        <svg width="180" height="48" viewBox="0 0 380 100" fill="none">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+        </svg>
+      </div>
+      <em>Dùng nguyên bản trên nền sáng hoặc nền brand.</em>
+    </div>
+    <div class="dont no">
+      <span class="tag">✗ Don't</span>
+      <div class="pad">
+        <svg width="180" height="48" viewBox="0 0 380 100" fill="none" style="filter: drop-shadow(0 4px 8px rgba(255,122,15,0.6));">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#FF00AA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#9933FF"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#9933FF"/>
+          <circle cx="92" cy="72" r="5" fill="#00FF66"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#9933FF">Zmenu</text>
+        </svg>
+      </div>
+      <em>Không thay màu, thêm shadow nặng, hay đổi font.</em>
+    </div>
+    <div class="dont no">
+      <span class="tag">✗ Don't</span>
+      <div class="pad">
+        <svg width="180" height="48" viewBox="0 0 380 100" fill="none" style="transform: skewX(-12deg);">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+        </svg>
+      </div>
+      <em>Không nghiêng, kéo giãn, hoặc xoay logo.</em>
+    </div>
+  </div>
+
+  <!-- ─── 7. CONTEXT ───────────────────────────────────── -->
+  <h2><span class="num">07</span>In context</h2>
+  <p class="desc">Ứng dụng tiêu biểu cho PWA + bộ nhận diện.</p>
+
+  <div class="ctx-grid">
+    <!-- App icon -->
+    <div class="ctx">
+      <div class="ctx-canvas" style="background:linear-gradient(135deg,#F5FEFE 0%,#E0F6F7 100%);">
+        <div style="width:120px; height:120px; border-radius:26px; background:#fff; box-shadow:0 14px 30px rgba(1,64,109,0.18); display:flex; align-items:center; justify-content:center;">
+          <svg width="78" height="78" viewBox="0 0 100 100" fill="none">
+            <rect x="10" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="10" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="10" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="96" cy="72" r="5" fill="#FF7A0F"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ctx-meta"><b>App icon · iOS</b>120 × 120 · radius 26</div>
+    </div>
+
+    <!-- PWA header -->
+    <div class="ctx">
+      <div class="ctx-canvas" style="background:var(--ice); padding:0; min-height:160px; align-items:flex-start;">
+        <div style="width:100%; background:#01406D; padding:18px 16px; display:flex; align-items:center; justify-content:space-between;">
+          <svg width="92" height="24" viewBox="0 0 380 100" fill="none">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#F5FEFE"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#F5FEFE"/>
+            <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#F5FEFE">Zmenu</text>
+          </svg>
+          <div style="display:flex; gap:6px;">
+            <div style="width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.15);"></div>
+            <div style="width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.15);"></div>
+          </div>
+        </div>
+        <div style="padding:24px 16px; flex:1; width:100%;">
+          <div style="height:8px; width:60%; background:var(--line); border-radius:4px; margin-bottom:8px;"></div>
+          <div style="height:8px; width:40%; background:var(--line); border-radius:4px;"></div>
+        </div>
+      </div>
+      <div class="ctx-meta"><b>PWA · Top bar</b>Reverse on navy</div>
+    </div>
+
+    <!-- Splash -->
+    <div class="ctx">
+      <div class="ctx-canvas" style="background:#01406D; min-height:200px;">
+        <svg width="180" height="48" viewBox="0 0 380 100" fill="none">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#F5FEFE"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#F5FEFE"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#F5FEFE">Zmenu</text>
+        </svg>
+      </div>
+      <div class="ctx-meta"><b>Splash screen</b>Logo center · navy bg</div>
+    </div>
+
+    <!-- Favicon -->
+    <div class="ctx">
+      <div class="ctx-canvas" style="background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; background:var(--ice); border:1px solid var(--line); border-radius:6px; padding:6px 12px 6px 8px; width:auto;">
+          <svg width="14" height="14" viewBox="0 0 100 100" fill="none">
+            <rect x="10" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="10" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="10" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="96" cy="72" r="5" fill="#FF7A0F"/>
+          </svg>
+          <span style="font-size:12px; color:var(--ink2);">zmenu.vn / dashboard</span>
+        </div>
+      </div>
+      <div class="ctx-meta"><b>Favicon</b>Browser tab · 16/32px</div>
+    </div>
+
+    <!-- Business card -->
+    <div class="ctx">
+      <div class="ctx-canvas" style="background:#EEF6F7;">
+        <div style="width:200px; height:120px; background:#fff; border-radius:8px; box-shadow:0 8px 22px rgba(1,64,109,0.12); padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
+          <svg width="70" height="18" viewBox="0 0 380 100" fill="none">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+          </svg>
+          <div>
+            <div style="font-family:'Be Vietnam Pro',sans-serif; font-weight:700; font-size:11px; color:var(--ink);">[Tên chủ quán]</div>
+            <div style="font-size:9.5px; color:var(--ink2); margin-top:2px;">F&amp;B Operator · zmenu.vn</div>
+          </div>
+        </div>
+      </div>
+      <div class="ctx-meta"><b>Business card</b>Print-ready</div>
+    </div>
+
+    <!-- T-shirt / merch -->
+    <div class="ctx">
+      <div class="ctx-canvas" style="background:linear-gradient(180deg,#01406D 0%, #013353 100%);">
+        <div style="text-align:center; color:#F5FEFE;">
+          <svg width="160" height="42" viewBox="0 0 380 100" fill="none">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#F5FEFE"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#F5FEFE"/>
+            <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#F5FEFE">Zmenu</text>
+          </svg>
+          <div style="font-size:10px; opacity:0.6; margin-top:6px; font-family:ui-monospace,Menlo,monospace; letter-spacing:1px;">CREW · 2026</div>
+        </div>
+      </div>
+      <div class="ctx-meta"><b>Crew swag</b>Reverse on navy</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

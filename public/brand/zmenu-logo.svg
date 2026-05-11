@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="100" viewBox="0 0 380 100" fill="none" role="img" aria-label="Zmenu">
+  <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"></rect>
+  <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"></rect>
+  <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"></rect>
+  <circle cx="92" cy="72" r="5" fill="#FF7A0F"></circle>
+  <text x="118" y="70" font-family="Be Vietnam Pro, system-ui, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+</svg>

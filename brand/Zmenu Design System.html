@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zmenu Design System · v1.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ═══ TOKENS — copy this block to use Zmenu DS ═══ */
+  :root {
+    --navy: #01406D;
+    --teal: #01B4BA;
+    --orange: #FF7A0F;
+    --ice: #F5FEFE;
+    --ink: #0E1B26;
+    --ink2: #5A6B78;
+    --ink3: #92A1AE;
+    --line: #E3EEF1;
+    /* radius */
+    --r-sm: 8px;  --r-md: 12px;  --r-lg: 14px;  --r-xl: 16px;  --r-pill: 999px;
+    /* spacing */
+    --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;  --s-5: 20px;  --s-6: 24px;  --s-8: 32px;
+    /* shadow */
+    --sh-card: 0 1px 2px rgba(1,64,109,0.04), 0 4px 16px rgba(1,64,109,0.05);
+    --sh-sticky: 0 10px 30px rgba(1,64,109,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:#EEF6F7; font-family:"Inter", system-ui, sans-serif; -webkit-font-smoothing:antialiased; color:var(--ink); }
+  code, pre { font-family:"JetBrains Mono", ui-monospace, Menlo, monospace; }
+
+  /* ─── Layout ─────────────────────────────── */
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 56px 40px 80px; }
+  @media (max-width: 720px) { .wrap { padding: 32px 16px 56px; } }
+
+  .toc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .toc a {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600;
+    color: var(--ink2); text-decoration: none;
+    padding: 5px 10px; border-radius: var(--r-pill); border: 1px solid var(--line);
+    background: #fff;
+  }
+  .toc a:hover { color: var(--navy); border-color: var(--teal); }
+
+  section { margin-top: 64px; scroll-margin-top: 24px; }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 24px; flex-wrap: wrap; }
+  .sec-num { font-family:"JetBrains Mono", monospace; font-size: 12px; color: var(--teal); font-weight: 700; letter-spacing: 1.5px; }
+  .sec-title { font-family:"Be Vietnam Pro", sans-serif; font-weight: 800; font-size: 28px; color: var(--navy); letter-spacing: -0.5px; margin: 4px 0 0; }
+  .sec-sub { font-size: 13px; color: var(--ink2); max-width: 480px; line-height: 1.55; margin: 0; }
+
+  /* ─── Code blocks ──────────────────────────── */
+  pre.code {
+    background: #0B1A26; color: #C9D7E2;
+    padding: 14px 16px; border-radius: var(--r-md); margin: 12px 0 0;
+    font-size: 11.5px; line-height: 1.6; overflow-x: auto;
+    border: 1px solid #112736;
+  }
+  pre.code .k  { color: #6BD4D8; }   /* keyword */
+  pre.code .s  { color: #FFB875; }   /* string */
+  pre.code .c  { color: #5A6B78; font-style: italic; }
+  pre.code .v  { color: #E8F0F5; }
+  pre.code .p  { color: #92A1AE; }   /* punct */
+  pre.code .t  { color: #FFB875; }   /* tag */
+
+  /* ─── Cards / panels ───────────────────────── */
+  .panel { background:#fff; border:1px solid var(--line); border-radius: var(--r-xl); padding: 20px; }
+  .panel.no-pad { padding: 0; }
+
+  /* ─── Header logo ──────────────────────────── */
+  header.brand { display: flex; flex-direction: column; gap: 18px; padding: 8px 0 24px; border-bottom: 1px solid var(--line); }
+  .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .brand-meta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; color: var(--ink2);
+    padding: 6px 12px; background: #fff; border: 1px solid var(--line); border-radius: var(--r-pill);
+  }
+  .brand-meta b { color: var(--navy); font-weight: 700; }
+  .brand-meta i { width: 6px; height: 6px; border-radius: 999px; background: var(--teal); display: inline-block; }
+  .brand-title { font-family:"Be Vietnam Pro", sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); margin-top: 2px; }
+  .brand-sub { font-size: 12.5px; color: var(--ink2); max-width: 560px; line-height: 1.55; margin: 4px 0 0; }
+
+  /* ═══════════════════════════════════════════ */
+  /* COLOR TOKENS                                */
+  /* ═══════════════════════════════════════════ */
+  .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 880px) { .color-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .color-grid { grid-template-columns: 1fr; } }
+  .color-card { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+  .color-chip { height: 88px; display: flex; align-items: flex-end; padding: 12px; }
+  .color-chip .hex {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600;
+    background: rgba(255,255,255,0.85); padding: 3px 7px; border-radius: 4px;
+    color: var(--ink);
+  }
+  .color-chip.dark .hex { background: rgba(0,0,0,0.35); color: #fff; }
+  .color-meta { padding: 12px 14px; }
+  .color-meta b { display: block; font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 14px; }
+  .color-meta code { display: block; font-size: 11px; color: var(--teal); font-weight: 600; margin-top: 2px; }
+  .color-meta em { font-style: normal; font-size: 11.5px; color: var(--ink2); display: block; margin-top: 6px; line-height: 1.5; }
+
+  /* ═══════════════════════════════════════════ */
+  /* TYPOGRAPHY                                  */
+  /* ═══════════════════════════════════════════ */
+  .type-table { background: #fff; border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; }
+  .type-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 16px; padding: 18px 22px; border-top: 1px solid var(--line); align-items: baseline; }
+  .type-row:first-child { border-top: none; }
+  @media (max-width: 720px) { .type-row { grid-template-columns: 1fr; gap: 6px; padding: 14px 18px; } }
+  .type-sample { color: var(--ink); }
+  .type-sample.disp { font-family: "Be Vietnam Pro", sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.6px; line-height: 1.05; }
+  .type-sample.h1   { font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.3px; line-height: 1.15; }
+  .type-sample.h2   { font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 20px; line-height: 1.2; }
+  .type-sample.h3   { font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 16px; line-height: 1.3; }
+  .type-sample.lbl  { font-family: "Be Vietnam Pro", sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.2px; text-transform: uppercase; color: var(--ink2); }
+  .type-sample.body { font-family: "Inter", sans-serif; font-weight: 400; font-size: 15px; line-height: 1.55; }
+  .type-sample.small{ font-family: "Inter", sans-serif; font-weight: 500; font-size: 13px; line-height: 1.5; }
+  .type-sample.cap  { font-family: "Inter", sans-serif; font-weight: 500; font-size: 11px; line-height: 1.4; color: var(--ink2); }
+  .type-sample.mono { font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 12px; color: var(--ink); }
+  .type-name { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; color: var(--teal); letter-spacing: 0.4px; }
+  .type-name b { color: var(--ink); font-weight: 700; }
+  .type-use { font-size: 12px; color: var(--ink2); line-height: 1.5; }
+
+  /* ═══════════════════════════════════════════ */
+  /* LOGO                                        */
+  /* ═══════════════════════════════════════════ */
+  .logo-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 880px) { .logo-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .logo-grid { grid-template-columns: 1fr; } }
+  .logo-tile { border-radius: var(--r-xl); padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; min-height: 200px; justify-content: center; }
+  .logo-tile.light { background: var(--ice); border: 1px solid var(--line); }
+  .logo-tile.dark  { background: var(--navy); }
+  .logo-tile .label { font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.4px; color: var(--ink2); text-transform: uppercase; }
+  .logo-tile.dark .label { color: rgba(255,255,255,0.5); }
+
+  .clear-space {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-xl);
+    padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .clear-space .cap { font-size: 12px; color: var(--ink2); text-align: center; max-width: 480px; line-height: 1.5; }
+
+  .donts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 880px) { .donts { grid-template-columns: repeat(2, 1fr); } }
+  .dont {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 16px 14px; display: flex; flex-direction: column; gap: 8px;
+    min-height: 130px;
+  }
+  .dont .pill {
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 5px;
+    background: #FCE4E4; color: #C2272D;
+  }
+  .dont .vis { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 56px; }
+  .dont em { font-style: normal; font-size: 11.5px; color: var(--ink2); line-height: 1.45; }
+
+  /* ═══════════════════════════════════════════ */
+  /* COMPONENTS                                  */
+  /* ═══════════════════════════════════════════ */
+  .comp-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .comp { background: #fff; border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; }
+  .comp-head { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 18px 0; }
+  .comp-head h3 { font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); margin: 0; }
+  .comp-head .meta { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink2); font-weight: 600; }
+  .comp-render { padding: 24px 18px; background: #EEF6F7; border-top: 1px solid var(--line); margin-top: 12px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .comp-render.dark { background: var(--navy); }
+  .comp-render.cap-frame {
+    /* fixed-width 358 (390 - 16*2) for mobile context */
+    padding: 24px;
+  }
+  .comp-render.center { justify-content: center; }
+  .comp-render.column { flex-direction: column; align-items: stretch; }
+  .frame-390 {
+    width: 100%; max-width: 358px; margin: 0 auto;
+  }
+  pre.code.in-comp { margin: 0; border-radius: 0; border-top: 1px solid #112736; border-left: none; border-right: none; border-bottom: none; }
+
+  /* ─── Real components (live) ────────────────── */
+  .btn-primary, .btn-secondary, .btn-cta {
+    border: none; cursor: pointer; font-family: "Be Vietnam Pro", sans-serif; font-weight: 700;
+    font-size: 14.5px; padding: 14px 22px; border-radius: var(--r-lg);
+    display: inline-flex; align-items: center; gap: 8px; line-height: 1;
+  }
+  .btn-primary { background: var(--navy); color: #fff; box-shadow: 0 8px 20px rgba(1,64,109,0.22); }
+  .btn-secondary { background: #fff; color: var(--navy); border: 1.5px solid var(--navy); }
+  .btn-cta { background: var(--orange); color: #fff; box-shadow: 0 8px 20px rgba(255,122,15,0.28); }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: "Inter", sans-serif; font-size: 11px; font-weight: 700;
+    padding: 4px 9px; border-radius: var(--r-pill);
+  }
+  .badge.flash { background: var(--orange); color: #fff; }
+  .badge.open  { background: #E8F8EE; color: #16A34A; }
+  .badge.open i { width: 6px; height: 6px; border-radius: 999px; background: #16A34A; }
+  .badge.wait  { background: #EFF3F5; color: var(--ink2); }
+
+  .field {
+    width: 100%;
+    background: #fff; border: 1.5px solid var(--line); border-radius: var(--r-md);
+    padding: 12px 14px; display: flex; align-items: center; gap: 10px;
+    transition: border 0.15s;
+  }
+  .field.focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(1,180,186,0.12); }
+  .field input {
+    border: none; outline: none; flex: 1; font: inherit; font-size: 14px; color: var(--ink); background: transparent;
+    font-family: "Inter", sans-serif;
+  }
+  .field input::placeholder { color: var(--ink3); }
+  .field-label { font-family: "Be Vietnam Pro", sans-serif; font-size: 12.5px; font-weight: 600; color: var(--ink2); margin-bottom: 6px; }
+
+  /* product card */
+  .pcard {
+    background: #fff; border-radius: var(--r-xl); padding: 8px;
+    box-shadow: var(--sh-card);
+    width: 168px;
+  }
+  .pcard .ph {
+    height: 120px; border-radius: var(--r-md); position: relative; overflow: hidden;
+    background: repeating-linear-gradient(135deg, #DCEAF3 0 10px, #C5DBEA 10px 20px);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--navy); font-family: "JetBrains Mono", monospace; font-size: 9.5px; opacity: 0.7;
+    text-transform: uppercase;
+  }
+  .pcard .body { padding: 8px 4px 4px; }
+  .pcard .name { font-size: 13.5px; font-weight: 600; line-height: 1.25; min-height: 34px; }
+  .pcard .row { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+  .pcard .price { font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 14.5px; color: var(--orange); }
+  .pcard .add {
+    border: none; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 999px; background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(1,64,109,0.25);
+  }
+
+  /* chips */
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    flex: none; padding: 8px 14px; border-radius: var(--r-pill);
+    font-size: 12.5px; font-weight: 600;
+    background: #fff; color: var(--ink); border: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* sticky bar */
+  .sticky-bar {
+    background: var(--navy); color: #fff; border-radius: var(--r-xl);
+    padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--sh-sticky);
+  }
+  .sticky-bar .left { display: flex; align-items: center; gap: 10px; }
+  .sticky-bar .icon-wrap {
+    position: relative; width: 36px; height: 36px; border-radius: var(--r-md);
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sticky-bar .dot {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 18px; height: 18px; border-radius: 999px; background: var(--orange);
+    color: #fff; font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; padding: 0 4px;
+  }
+  .sticky-bar .meta { line-height: 1.1; }
+  .sticky-bar .meta small { font-size: 11px; opacity: 0.7; }
+  .sticky-bar .meta b { font-family: "Be Vietnam Pro", sans-serif; font-weight: 700; font-size: 16px; display: block; margin-top: 2px; }
+  .sticky-bar .cta {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--orange); padding: 10px 14px; border-radius: var(--r-md); font-weight: 700; font-size: 13.5px;
+  }
+
+  /* tab bar */
+  .tabbar {
+    background: #fff; border-top: 1px solid var(--line);
+    padding: 8px 16px 12px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-radius: 0 0 var(--r-xl) var(--r-xl);
+  }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--ink3); font-size: 10px; font-weight: 600; cursor: pointer;
+    position: relative;
+  }
+  .tab.active { color: var(--navy); font-weight: 700; }
+
+  /* ═══════════════════════════════════════════ */
+  /* SPACING & RADIUS                            */
+  /* ═══════════════════════════════════════════ */
+  .scale-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+  @media (max-width: 720px) { .scale-grid { grid-template-columns: repeat(4, 1fr); } }
+  .scale-tile {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 14px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; min-height: 120px;
+  }
+  .scale-tile .vis { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .scale-tile .bar { background: var(--teal); border-radius: 3px; }
+  .scale-tile .name { font-family: "JetBrains Mono", monospace; font-size: 10.5px; font-weight: 700; color: var(--navy); }
+  .scale-tile .px { font-size: 10px; color: var(--ink2); }
+
+  .radius-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px; }
+  @media (max-width: 720px) { .radius-grid { grid-template-columns: repeat(3, 1fr); } }
+  .radius-tile {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 14px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .radius-tile .swatch {
+    width: 56px; height: 56px; background: var(--teal);
+    border: 1px solid var(--navy); border-color: rgba(1,64,109,0.15);
+  }
+
+  .shadow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  @media (max-width: 720px) { .shadow-grid { grid-template-columns: 1fr; } }
+  .shadow-tile {
+    background: var(--ice); border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .shadow-card-demo {
+    width: 80%; height: 60px; background: #fff; border-radius: var(--r-lg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Be Vietnam Pro"; font-weight: 700; font-size: 13px; color: var(--navy);
+  }
+
+  /* ═══════════════════════════════════════════ */
+  /* ICONS                                       */
+  /* ═══════════════════════════════════════════ */
+  .icon-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  @media (max-width: 720px) { .icon-grid { grid-template-columns: repeat(3, 1fr); } }
+  .icon-tile {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    min-height: 110px;
+  }
+  .icon-tile .vis { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .icon-tile .name { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink2); font-weight: 600; }
+  .icon-size-row { display: flex; align-items: center; gap: 24px; padding: 18px; background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+  .icon-size-row .item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .icon-size-row b { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink2); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 01 · HEADER                                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <header class="brand">
+    <div class="brand-row">
+      <!-- Logo light -->
+      <svg width="220" height="58" viewBox="0 0 380 100" fill="none" aria-label="Zmenu">
+        <rect x="6"  y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+        <rect x="6"  y="44" width="78" height="12" rx="3" fill="#01406D"/>
+        <rect x="6"  y="66" width="48" height="12" rx="3" fill="#01406D"/>
+        <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+        <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+      </svg>
+      <span class="brand-meta">
+        <i></i><b>Design System</b> · v1.3 · PWA Mobile First
+      </span>
+    </div>
+    <p class="brand-sub">
+      Single-source reference cho UI / UX của Zmenu — palette, typography, components, spacing, icon. Mobile-first base 390px. Dùng để Agent Code tham chiếu khi build, và để PM / designer giữ nhất quán.
+    </p>
+    <nav class="toc">
+      <a href="#colors">02 · Colors</a>
+      <a href="#type">03 · Typography</a>
+      <a href="#logo">04 · Logo</a>
+      <a href="#components">05 · Components</a>
+      <a href="#scale">06 · Spacing &amp; Radius</a>
+      <a href="#icons">07 · Icons</a>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 02 · COLOR TOKENS                            -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="colors">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">02 · COLORS</div>
+        <h2 class="sec-title">Color tokens</h2>
+      </div>
+      <p class="sec-sub">8 màu, dùng đúng vai trò. Không tạo gradient ngoài brand, không thay sắc độ.</p>
+    </div>
+
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-chip" style="background:#01406D"><span class="hex" style="background:rgba(0,0,0,0.35); color:#fff">#01406D</span></div>
+        <div class="color-meta"><b>Navy</b><code>--navy</code><em>Primary text · header · structure</em></div>
+      </div>
+      <div class="color-card">
+        <div class="color-chip dark" style="background:#01B4BA"><span class="hex">#01B4BA</span></div>
+        <div class="color-meta"><b>Teal</b><code>--teal</code><em>Accent · focus · CTA phụ</em></div>
+      </div>
+      <div class="color-card">
+        <div class="color-chip dark" style="background:#FF7A0F"><span class="hex">#FF7A0F</span></div>
+        <div class="color-meta"><b>Orange</b><code>--orange</code><em>CTA chính · giá · flash deal</em></div>
+      </div>
+      <div class="color-card">
+        <div class="color-chip" style="background:#F5FEFE; border-bottom:1px solid var(--line)"><span class="hex">#F5FEFE</span></div>
+        <div class="color-meta"><b>Ice</b><code>--ice</code><em>Background · canvas · reverse text</em></div>
+      </div>
+
+      <div class="color-card">
+        <div class="color-chip dark" style="background:#0E1B26"><span class="hex">#0E1B26</span></div>
+        <div class="color-meta"><b>Ink</b><code>--ink</code><em>Body text mặc định</em></div>
+      </div>
+      <div class="color-card">
+        <div class="color-chip" style="background:#5A6B78"><span class="hex" style="background:rgba(0,0,0,0.25); color:#fff">#5A6B78</span></div>
+        <div class="color-meta"><b>Ink 2</b><code>--ink2</code><em>Secondary · meta · captions</em></div>
+      </div>
+      <div class="color-card">
+        <div class="color-chip" style="background:#92A1AE"><span class="hex" style="background:rgba(0,0,0,0.2); color:#fff">#92A1AE</span></div>
+        <div class="color-meta"><b>Ink 3</b><code>--ink3</code><em>Placeholder · disabled · hint</em></div>
+      </div>
+      <div class="color-card">
+        <div class="color-chip" style="background:#E3EEF1; border-bottom:1px solid #d0dde0"><span class="hex">#E3EEF1</span></div>
+        <div class="color-meta"><b>Line</b><code>--line</code><em>Divider · border · subtle bg</em></div>
+      </div>
+    </div>
+
+    <pre class="code"><span class="c">/* Copy block — Zmenu color tokens */</span>
+<span class="t">:root</span> <span class="p">{</span>
+  <span class="k">--navy</span><span class="p">:</span>   <span class="s">#01406D</span><span class="p">;</span>
+  <span class="k">--teal</span><span class="p">:</span>   <span class="s">#01B4BA</span><span class="p">;</span>
+  <span class="k">--orange</span><span class="p">:</span> <span class="s">#FF7A0F</span><span class="p">;</span>
+  <span class="k">--ice</span><span class="p">:</span>    <span class="s">#F5FEFE</span><span class="p">;</span>
+  <span class="k">--ink</span><span class="p">:</span>    <span class="s">#0E1B26</span><span class="p">;</span>
+  <span class="k">--ink2</span><span class="p">:</span>   <span class="s">#5A6B78</span><span class="p">;</span>
+  <span class="k">--ink3</span><span class="p">:</span>   <span class="s">#92A1AE</span><span class="p">;</span>
+  <span class="k">--line</span><span class="p">:</span>   <span class="s">#E3EEF1</span><span class="p">;</span>
+<span class="p">}</span></pre>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 03 · TYPOGRAPHY                              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="type">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">03 · TYPE</div>
+        <h2 class="sec-title">Typography scale</h2>
+      </div>
+      <p class="sec-sub">Be Vietnam Pro cho heading + brand. Inter cho body + UI. JetBrains Mono cho mã, số, token.</p>
+    </div>
+
+    <div class="type-table">
+      <div class="type-row">
+        <div class="type-sample disp">Đặt món chỉ trong 30 giây</div>
+        <div class="type-name"><b>Display</b> · 32 / 800</div>
+        <div class="type-use">Hero · landing · campaign headline</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample h1">Phổ biến hôm nay</div>
+        <div class="type-name"><b>H1</b> · 24 / 700</div>
+        <div class="type-use">Page title · screen header</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample h2">Xác nhận đơn hàng</div>
+        <div class="type-name"><b>H2</b> · 20 / 700</div>
+        <div class="type-use">Section · modal title</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample h3">Cơm gà xối mỡ</div>
+        <div class="type-name"><b>H3</b> · 16 / 700</div>
+        <div class="type-use">Card title · list-item heading</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample lbl">Số bàn</div>
+        <div class="type-name"><b>Label</b> · 13 / 600 · uppercase</div>
+        <div class="type-use">Form label · section eyebrow</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample body">Bún bò Huế chuẩn vị, thơm lừng nước dùng đậm đà — phục vụ kèm rau sống và chanh.</div>
+        <div class="type-name"><b>Body</b> · 15 / 400 · Inter</div>
+        <div class="type-use">Mô tả sản phẩm · paragraph</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample small">2 phút trước · Bàn 05 · 2 món</div>
+        <div class="type-name"><b>Small</b> · 13 / 500 · Inter</div>
+        <div class="type-use">Meta · timestamp · helper</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample cap">TUỲ CHỌN · KHÔNG BẮT BUỘC</div>
+        <div class="type-name"><b>Caption</b> · 11 / 500 · Inter</div>
+        <div class="type-use">Hint · footnote · tag</div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample mono">--orange · #FF7A0F · 32px</div>
+        <div class="type-name"><b>Mono</b> · 12 / 500 · JetBrains</div>
+        <div class="type-use">Token · code · numeric ID</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 04 · LOGO                                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="logo">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">04 · LOGO</div>
+        <h2 class="sec-title">Logo usage</h2>
+      </div>
+      <p class="sec-sub">Logo light cho nền sáng, logo dark cho nền navy. Mark đứng độc lập làm app icon / favicon.</p>
+    </div>
+
+    <div class="logo-grid">
+      <div class="logo-tile light">
+        <svg width="220" height="58" viewBox="0 0 380 100" fill="none">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+        </svg>
+        <span class="label">Light · on Ice</span>
+      </div>
+      <div class="logo-tile dark">
+        <svg width="180" height="48" viewBox="0 0 380 100" fill="none">
+          <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="6" y="44" width="78" height="12" rx="3" fill="#F5FEFE"/>
+          <rect x="6" y="66" width="48" height="12" rx="3" fill="#F5FEFE"/>
+          <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+          <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#F5FEFE">Zmenu</text>
+        </svg>
+        <span class="label">Dark · on Navy</span>
+      </div>
+      <div class="logo-tile light">
+        <svg width="68" height="68" viewBox="0 0 100 100" fill="none">
+          <rect x="10" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+          <rect x="10" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+          <rect x="10" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+          <circle cx="96" cy="72" r="5" fill="#FF7A0F"/>
+        </svg>
+        <span class="label">Mark · standalone</span>
+      </div>
+    </div>
+
+    <!-- Clear space -->
+    <div style="margin-top: 14px;">
+      <div class="clear-space">
+        <svg width="560" height="180" viewBox="0 0 560 180" fill="none">
+          <rect x="20" y="40" width="510" height="100" rx="6" stroke="#01B4BA" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.7"/>
+          <g stroke="#01B4BA" stroke-width="1" opacity="0.6">
+            <line x1="0" y1="40" x2="20" y2="40"/>
+            <line x1="0" y1="140" x2="20" y2="140"/>
+            <line x1="540" y1="40" x2="560" y2="40"/>
+            <line x1="540" y1="140" x2="560" y2="140"/>
+          </g>
+          <text x="6" y="36" font-family="JetBrains Mono, monospace" font-size="9" fill="#01B4BA">1X</text>
+          <text x="540" y="36" font-family="JetBrains Mono, monospace" font-size="9" fill="#01B4BA">1X</text>
+          <g transform="translate(40,52)">
+            <rect x="0"  y="2"  width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="0"  y="24" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="0"  y="46" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="86" cy="52" r="5" fill="#FF7A0F"/>
+            <text x="112" y="50" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+          </g>
+          <g stroke="#FF7A0F" stroke-width="1" opacity="0.9">
+            <line x1="200" y1="54" x2="220" y2="54"/>
+            <line x1="200" y1="66" x2="220" y2="66"/>
+            <line x1="210" y1="54" x2="210" y2="66"/>
+          </g>
+          <text x="225" y="64" font-family="JetBrains Mono, monospace" font-size="10" fill="#FF7A0F" font-weight="700">X = 12</text>
+        </svg>
+        <p class="cap">Đơn vị X = chiều cao thanh menu (12px tại tỉ lệ chuẩn). Vùng cách ly tối thiểu = 1X xung quanh logo.</p>
+      </div>
+    </div>
+
+    <!-- Don'ts -->
+    <h3 style="font-family:'Be Vietnam Pro',sans-serif; font-weight:700; font-size:14px; margin:24px 0 10px; color:var(--ink); text-transform:uppercase; letter-spacing:0.4px;">Don't</h3>
+    <div class="donts">
+      <div class="dont">
+        <span class="pill">✗ Color</span>
+        <div class="vis">
+          <svg width="120" height="32" viewBox="0 0 380 100" fill="none">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#FF00AA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#9933FF"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#9933FF"/>
+            <circle cx="92" cy="72" r="5" fill="#00FF66"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#9933FF">Zmenu</text>
+          </svg>
+        </div>
+        <em>Không đổi màu ngoài brand palette.</em>
+      </div>
+      <div class="dont">
+        <span class="pill">✗ Skew</span>
+        <div class="vis">
+          <svg width="120" height="32" viewBox="0 0 380 100" fill="none" style="transform: skewX(-14deg)">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+          </svg>
+        </div>
+        <em>Không nghiêng, kéo giãn, xoay logo.</em>
+      </div>
+      <div class="dont">
+        <span class="pill">✗ Shadow</span>
+        <div class="vis">
+          <svg width="120" height="32" viewBox="0 0 380 100" fill="none" style="filter: drop-shadow(0 6px 8px rgba(255,122,15,0.6))">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+          </svg>
+        </div>
+        <em>Không thêm shadow nặng, glow, hay outline.</em>
+      </div>
+      <div class="dont">
+        <span class="pill">✗ Bg</span>
+        <div class="vis" style="background: repeating-linear-gradient(135deg,#01B4BA 0 8px,#FF7A0F 8px 16px); padding: 10px; border-radius: 8px;">
+          <svg width="120" height="32" viewBox="0 0 380 100" fill="none">
+            <rect x="6" y="22" width="60" height="12" rx="3" fill="#01B4BA"/>
+            <rect x="6" y="44" width="78" height="12" rx="3" fill="#01406D"/>
+            <rect x="6" y="66" width="48" height="12" rx="3" fill="#01406D"/>
+            <circle cx="92" cy="72" r="5" fill="#FF7A0F"/>
+            <text x="118" y="70" font-family="Be Vietnam Pro, sans-serif" font-weight="700" font-size="60" letter-spacing="-2" fill="#01406D">Zmenu</text>
+          </svg>
+        </div>
+        <em>Không đặt logo trên nền nhiễu, hoa văn.</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 05 · COMPONENTS                              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="components">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">05 · COMPONENTS</div>
+        <h2 class="sec-title">Components · 390px</h2>
+      </div>
+      <p class="sec-sub">Mobile-first base 390px. Mỗi component render thật + code snippet sẵn dùng.</p>
+    </div>
+
+    <div class="comp-grid">
+
+      <!-- ─── BUTTON PRIMARY ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Button · Primary</h3>
+          <span class="meta">.btn-primary</span>
+        </div>
+        <div class="comp-render">
+          <button class="btn-primary">Đặt ngay</button>
+          <button class="btn-primary">Xác nhận đơn</button>
+          <button class="btn-primary" disabled style="opacity:0.4; cursor:not-allowed; box-shadow:none;">Đang xử lý...</button>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;button</span> <span class="k">class</span>=<span class="s">"btn-primary"</span><span class="t">&gt;</span><span class="v">Đặt ngay</span><span class="t">&lt;/button&gt;</span>
+
+<span class="t">.btn-primary</span> <span class="p">{</span>
+  <span class="k">background</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--navy</span><span class="p">);</span> <span class="k">color</span><span class="p">:</span> <span class="s">#fff</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="s">14px 22px</span><span class="p">;</span> <span class="k">border-radius</span><span class="p">:</span> <span class="s">14px</span><span class="p">;</span>
+  <span class="k">font</span><span class="p">:</span> <span class="s">700 14.5px "Be Vietnam Pro"</span><span class="p">;</span>
+  <span class="k">box-shadow</span><span class="p">:</span> <span class="s">0 8px 20px rgba(1,64,109,.22)</span><span class="p">;</span>
+<span class="p">}</span></pre>
+      </div>
+
+      <!-- ─── BUTTON SECONDARY ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Button · Secondary</h3>
+          <span class="meta">.btn-secondary</span>
+        </div>
+        <div class="comp-render">
+          <button class="btn-secondary">Xem chi tiết</button>
+          <button class="btn-secondary">Lưu nháp</button>
+          <button class="btn-secondary">Huỷ</button>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;button</span> <span class="k">class</span>=<span class="s">"btn-secondary"</span><span class="t">&gt;</span><span class="v">Xem chi tiết</span><span class="t">&lt;/button&gt;</span>
+
+<span class="t">.btn-secondary</span> <span class="p">{</span>
+  <span class="k">background</span><span class="p">:</span> <span class="s">#fff</span><span class="p">;</span> <span class="k">color</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--navy</span><span class="p">);</span>
+  <span class="k">border</span><span class="p">:</span> <span class="s">1.5px solid var(--navy)</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="s">14px 22px</span><span class="p">;</span> <span class="k">border-radius</span><span class="p">:</span> <span class="s">14px</span><span class="p">;</span>
+<span class="p">}</span></pre>
+      </div>
+
+      <!-- ─── BUTTON CTA ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Button · CTA Orange</h3>
+          <span class="meta">.btn-cta</span>
+        </div>
+        <div class="comp-render">
+          <button class="btn-cta">
+            Đặt ngay · 85.000đ
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="btn-cta">
+            Mua ngay
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;button</span> <span class="k">class</span>=<span class="s">"btn-cta"</span><span class="t">&gt;</span>
+  <span class="v">Đặt ngay · 85.000đ</span> <span class="t">&lt;svg</span> ...<span class="t">/&gt;</span>
+<span class="t">&lt;/button&gt;</span>
+
+<span class="t">.btn-cta</span> <span class="p">{</span>
+  <span class="k">background</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--orange</span><span class="p">);</span> <span class="k">color</span><span class="p">:</span> <span class="s">#fff</span><span class="p">;</span>
+  <span class="k">box-shadow</span><span class="p">:</span> <span class="s">0 8px 20px rgba(255,122,15,.28)</span><span class="p">;</span>
+<span class="p">}</span></pre>
+      </div>
+
+      <!-- ─── BADGES ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Badges</h3>
+          <span class="meta">.badge.flash · .open · .wait</span>
+        </div>
+        <div class="comp-render">
+          <span class="badge flash">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 4 4 5 4 9a4 4 0 1 1-8 0c0-2 1-3 1-5 1 1 2 1 3-4z"/></svg>
+            Flash Deal
+          </span>
+          <span class="badge open"><i></i> Đang mở</span>
+          <span class="badge wait">Chờ xác nhận</span>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;span</span> <span class="k">class</span>=<span class="s">"badge flash"</span><span class="t">&gt;</span><span class="v">Flash Deal</span><span class="t">&lt;/span&gt;</span>
+<span class="t">&lt;span</span> <span class="k">class</span>=<span class="s">"badge open"</span><span class="t">&gt;&lt;i/&gt;</span> <span class="v">Đang mở</span><span class="t">&lt;/span&gt;</span>
+<span class="t">&lt;span</span> <span class="k">class</span>=<span class="s">"badge wait"</span><span class="t">&gt;</span><span class="v">Chờ xác nhận</span><span class="t">&lt;/span&gt;</span></pre>
+      </div>
+
+      <!-- ─── INPUT FIELD ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Input field</h3>
+          <span class="meta">.field · .field.focus</span>
+        </div>
+        <div class="comp-render column">
+          <div class="frame-390">
+            <div class="field-label">Tên món</div>
+            <div class="field">
+              <input value="Cơm gà xối mỡ" />
+            </div>
+          </div>
+          <div class="frame-390">
+            <div class="field-label">Tìm kiếm</div>
+            <div class="field focus">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#5A6B78" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#5A6B78" stroke-width="2" stroke-linecap="round"/></svg>
+              <input placeholder="Tìm món, đồ uống..." />
+            </div>
+          </div>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"field"</span><span class="t">&gt;</span>
+  <span class="t">&lt;svg</span> ...<span class="t">/&gt;</span>
+  <span class="t">&lt;input</span> <span class="k">placeholder</span>=<span class="s">"Tìm món..."</span><span class="t">/&gt;</span>
+<span class="t">&lt;/div&gt;</span>
+
+<span class="t">.field</span> <span class="p">{</span> <span class="k">border</span><span class="p">:</span> <span class="s">1.5px solid var(--line)</span><span class="p">;</span> <span class="k">border-radius</span><span class="p">:</span> <span class="s">12px</span><span class="p">;</span> <span class="p">}</span>
+<span class="t">.field.focus</span> <span class="p">{</span> <span class="k">border-color</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--teal</span><span class="p">);</span> <span class="p">}</span></pre>
+      </div>
+
+      <!-- ─── PRODUCT CARD ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Product card</h3>
+          <span class="meta">.pcard</span>
+        </div>
+        <div class="comp-render">
+          <div class="pcard">
+            <div class="ph">COM GA / RICE BOWL</div>
+            <div class="body">
+              <div class="name">Cơm gà xối mỡ</div>
+              <div class="row">
+                <div class="price">45.000đ</div>
+                <button class="add" aria-label="add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <div class="pcard">
+            <div class="ph" style="background:repeating-linear-gradient(135deg,#D6F3F4 0 10px,#BDEAEC 10px 20px); color:var(--teal);">TRA DAO / TEA</div>
+            <div class="body">
+              <div class="name">Trà đào cam sả</div>
+              <div class="row">
+                <div class="price">35.000đ</div>
+                <button class="add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"pcard"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"ph"</span><span class="t">&gt;</span><span class="v">[image]</span><span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"body"</span><span class="t">&gt;</span>
+    <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"name"</span><span class="t">&gt;</span><span class="v">Cơm gà xối mỡ</span><span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"row"</span><span class="t">&gt;</span>
+      <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"price"</span><span class="t">&gt;</span><span class="v">45.000đ</span><span class="t">&lt;/div&gt;</span>
+      <span class="t">&lt;button</span> <span class="k">class</span>=<span class="s">"add"</span><span class="t">&gt;</span><span class="v">+</span><span class="t">&lt;/button&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/div&gt;</span></pre>
+      </div>
+
+      <!-- ─── CATEGORY CHIP ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Category chip</h3>
+          <span class="meta">.chip · .chip.active</span>
+        </div>
+        <div class="comp-render">
+          <div class="chip-row">
+            <button class="chip active">Tất cả</button>
+            <button class="chip">Món chính</button>
+            <button class="chip">Đồ uống</button>
+            <button class="chip">Combo</button>
+            <button class="chip">Flash Deal</button>
+          </div>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;button</span> <span class="k">class</span>=<span class="s">"chip active"</span><span class="t">&gt;</span><span class="v">Tất cả</span><span class="t">&lt;/button&gt;</span>
+<span class="t">&lt;button</span> <span class="k">class</span>=<span class="s">"chip"</span><span class="t">&gt;</span><span class="v">Món chính</span><span class="t">&lt;/button&gt;</span>
+
+<span class="t">.chip</span> <span class="p">{</span> <span class="k">background</span><span class="p">:</span> <span class="s">#fff</span><span class="p">;</span> <span class="k">border</span><span class="p">:</span> <span class="s">1px solid var(--line)</span><span class="p">;</span> <span class="p">}</span>
+<span class="t">.chip.active</span> <span class="p">{</span> <span class="k">background</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--navy</span><span class="p">);</span> <span class="k">color</span><span class="p">:</span> <span class="s">#fff</span><span class="p">;</span> <span class="p">}</span></pre>
+      </div>
+
+      <!-- ─── STICKY BAR ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Bottom sticky bar</h3>
+          <span class="meta">.sticky-bar</span>
+        </div>
+        <div class="comp-render center" style="background:#EEF6F7;">
+          <div class="frame-390">
+            <div class="sticky-bar">
+              <div class="left">
+                <div class="icon-wrap">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 4h2.5l2.4 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 1.95-1.55L21 8H6.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.4" fill="#fff"/><circle cx="17" cy="20" r="1.4" fill="#fff"/></svg>
+                  <div class="dot">2</div>
+                </div>
+                <div class="meta">
+                  <small>Giỏ hàng · 2 món</small>
+                  <b>90.000đ</b>
+                </div>
+              </div>
+              <div class="cta">
+                Đặt ngay
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"sticky-bar"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"left"</span><span class="t">&gt;</span><span class="c">/* cart icon + count */</span><span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;div</span> <span class="k">class</span>=<span class="s">"cta"</span><span class="t">&gt;</span><span class="v">Đặt ngay</span><span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/div&gt;</span>
+
+<span class="t">.sticky-bar</span> <span class="p">{</span>
+  <span class="k">background</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--navy</span><span class="p">);</span> <span class="k">border-radius</span><span class="p">:</span> <span class="s">16px</span><span class="p">;</span>
+  <span class="k">box-shadow</span><span class="p">:</span> <span class="k">var</span><span class="p">(</span><span class="s">--sh-sticky</span><span class="p">);</span>
+<span class="p">}</span></pre>
+      </div>
+
+      <!-- ─── TAB BAR ─── -->
+      <div class="comp">
+        <div class="comp-head">
+          <h3>Tab bar navigation</h3>
+          <span class="meta">.tabbar · 4 tabs</span>
+        </div>
+        <div class="comp-render center" style="padding: 0; background: var(--ice);">
+          <div class="frame-390">
+            <div class="tabbar">
+              <div class="tab active">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z" stroke="#01406D" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                Trang chủ
+              </div>
+              <div class="tab">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" stroke="#92A1AE" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#92A1AE" stroke-width="1.8" stroke-linecap="round"/></svg>
+                Đơn hàng
+              </div>
+              <div class="tab">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4-9 4-9-4z" stroke="#92A1AE" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 7v10l9 4 9-4V7M12 11v10" stroke="#92A1AE" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                Sản phẩm
+              </div>
+              <div class="tab">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" stroke="#92A1AE" stroke-width="1.8" stroke-linecap="round"/></svg>
+                Báo cáo
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre class="code in-comp"><span class="t">&lt;nav</span> <span class="k">class</span>=<span class="s">"tabbar"</span><span class="t">&gt;</span>
+  <span class="t">&lt;a</span> <span class="k">class</span>=<span class="s">"tab active"</span><span class="t">&gt;</span><span class="v">Trang chủ</span><span class="t">&lt;/a&gt;</span>
+  <span class="t">&lt;a</span> <span class="k">class</span>=<span class="s">"tab"</span><span class="t">&gt;</span><span class="v">Đơn hàng</span><span class="t">&lt;/a&gt;</span>
+  <span class="t">&lt;a</span> <span class="k">class</span>=<span class="s">"tab"</span><span class="t">&gt;</span><span class="v">Sản phẩm</span><span class="t">&lt;/a&gt;</span>
+  <span class="t">&lt;a</span> <span class="k">class</span>=<span class="s">"tab"</span><span class="t">&gt;</span><span class="v">Báo cáo</span><span class="t">&lt;/a&gt;</span>
+<span class="t">&lt;/nav&gt;</span></pre>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 06 · SPACING & RADIUS                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="scale">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">06 · SCALE</div>
+        <h2 class="sec-title">Spacing &amp; radius</h2>
+      </div>
+      <p class="sec-sub">Step 4 cố định: 4 · 8 · 12 · 16 · 20 · 24 · 32. Radius: 8 · 12 · 14 · 16 · pill.</p>
+    </div>
+
+    <div class="scale-grid">
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:4px; height:32px"></div></div><div class="name">--s-1</div><div class="px">4 px</div></div>
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:8px; height:32px"></div></div><div class="name">--s-2</div><div class="px">8 px</div></div>
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:12px; height:32px"></div></div><div class="name">--s-3</div><div class="px">12 px</div></div>
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:16px; height:32px"></div></div><div class="name">--s-4</div><div class="px">16 px</div></div>
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:20px; height:32px"></div></div><div class="name">--s-5</div><div class="px">20 px</div></div>
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:24px; height:32px"></div></div><div class="name">--s-6</div><div class="px">24 px</div></div>
+      <div class="scale-tile"><div class="vis"><div class="bar" style="width:32px; height:32px"></div></div><div class="name">--s-8</div><div class="px">32 px</div></div>
+    </div>
+
+    <div class="radius-grid">
+      <div class="radius-tile"><div class="swatch" style="border-radius:8px"></div><div class="name" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--navy);">--r-sm</div><div class="px" style="font-size:10px; color:var(--ink2)">8 px</div></div>
+      <div class="radius-tile"><div class="swatch" style="border-radius:12px"></div><div class="name" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--navy);">--r-md</div><div class="px" style="font-size:10px; color:var(--ink2)">12 px</div></div>
+      <div class="radius-tile"><div class="swatch" style="border-radius:14px"></div><div class="name" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--navy);">--r-lg</div><div class="px" style="font-size:10px; color:var(--ink2)">14 px</div></div>
+      <div class="radius-tile"><div class="swatch" style="border-radius:16px"></div><div class="name" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--navy);">--r-xl</div><div class="px" style="font-size:10px; color:var(--ink2)">16 px</div></div>
+      <div class="radius-tile"><div class="swatch" style="border-radius:999px"></div><div class="name" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--navy);">--r-pill</div><div class="px" style="font-size:10px; color:var(--ink2)">999 px</div></div>
+    </div>
+
+    <div class="shadow-grid">
+      <div class="shadow-tile">
+        <div class="shadow-card-demo" style="box-shadow: var(--sh-card);">Card shadow</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink2);">
+          <b style="color:var(--navy)">--sh-card</b><br/>
+          0 1px 2px rgba(1,64,109,.04),<br/>0 4px 16px rgba(1,64,109,.05)
+        </div>
+      </div>
+      <div class="shadow-tile">
+        <div class="shadow-card-demo" style="background:var(--navy); color:#fff; box-shadow: var(--sh-sticky);">Sticky bar</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink2);">
+          <b style="color:var(--navy)">--sh-sticky</b><br/>
+          0 10px 30px rgba(1,64,109,.35)
+        </div>
+      </div>
+    </div>
+
+    <pre class="code"><span class="c">/* Spacing + radius + shadow tokens */</span>
+<span class="t">:root</span> <span class="p">{</span>
+  <span class="k">--s-1</span><span class="p">:</span> <span class="s">4px</span><span class="p">;</span>   <span class="k">--s-2</span><span class="p">:</span> <span class="s">8px</span><span class="p">;</span>   <span class="k">--s-3</span><span class="p">:</span> <span class="s">12px</span><span class="p">;</span>  <span class="k">--s-4</span><span class="p">:</span> <span class="s">16px</span><span class="p">;</span>
+  <span class="k">--s-5</span><span class="p">:</span> <span class="s">20px</span><span class="p">;</span>  <span class="k">--s-6</span><span class="p">:</span> <span class="s">24px</span><span class="p">;</span>  <span class="k">--s-8</span><span class="p">:</span> <span class="s">32px</span><span class="p">;</span>
+
+  <span class="k">--r-sm</span><span class="p">:</span> <span class="s">8px</span><span class="p">;</span>   <span class="k">--r-md</span><span class="p">:</span> <span class="s">12px</span><span class="p">;</span>  <span class="k">--r-lg</span><span class="p">:</span> <span class="s">14px</span><span class="p">;</span>
+  <span class="k">--r-xl</span><span class="p">:</span> <span class="s">16px</span><span class="p">;</span>  <span class="k">--r-pill</span><span class="p">:</span> <span class="s">999px</span><span class="p">;</span>
+
+  <span class="k">--sh-card</span><span class="p">:</span>   <span class="s">0 1px 2px rgba(1,64,109,.04), 0 4px 16px rgba(1,64,109,.05)</span><span class="p">;</span>
+  <span class="k">--sh-sticky</span><span class="p">:</span> <span class="s">0 10px 30px rgba(1,64,109,.35)</span><span class="p">;</span>
+<span class="p">}</span></pre>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- 07 · ICONS                                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section id="icons">
+    <div class="sec-head">
+      <div>
+        <div class="sec-num">07 · ICONS</div>
+        <h2 class="sec-title">Icon style</h2>
+      </div>
+      <p class="sec-sub">Outline only · stroke 1.8px · không filled. Inline 18 · nav 22 · action 28.</p>
+    </div>
+
+    <!-- size row -->
+    <div class="icon-size-row">
+      <div class="item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#0E1B26" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <b>18 · inline</b>
+      </div>
+      <div class="item">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#0E1B26" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <b>22 · nav</b>
+      </div>
+      <div class="item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#0E1B26" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <b>28 · action</b>
+      </div>
+    </div>
+
+    <!-- icon library -->
+    <div class="icon-grid" style="margin-top:12px;">
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#0E1B26" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">search</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 4h2.5l2.4 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 1.95-1.55L21 8H6.2" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.4" stroke="#0E1B26" stroke-width="1.8"/><circle cx="17" cy="20" r="1.4" stroke="#0E1B26" stroke-width="1.8"/></svg></div>
+        <div class="name">cart</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">plus</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="name">arrow-right</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="name">back</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">close</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z" stroke="#0E1B26" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <div class="name">home</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" stroke="#0E1B26" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">receipt</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4-9 4-9-4z" stroke="#0E1B26" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 7v10l9 4 9-4V7M12 11v10" stroke="#0E1B26" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <div class="name">box</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">chart</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#0E1B26" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#0E1B26" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#0E1B26" stroke-width="1.8"/><path d="M14 14h3v3M21 14v3M14 21h7M17 17h4" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">qr</div>
+      </div>
+      <div class="icon-tile">
+        <div class="vis"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#0E1B26" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="#0E1B26" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="name">clock</div>
+      </div>
+    </div>
+
+    <pre class="code"><span class="c">/* Icon convention */</span>
+<span class="t">&lt;svg</span> <span class="k">width</span>=<span class="s">"22"</span> <span class="k">height</span>=<span class="s">"22"</span> <span class="k">viewBox</span>=<span class="s">"0 0 24 24"</span> <span class="k">fill</span>=<span class="s">"none"</span><span class="t">&gt;</span>
+  <span class="t">&lt;path</span> <span class="k">d</span>=<span class="s">"..."</span> <span class="k">stroke</span>=<span class="s">"currentColor"</span>
+        <span class="k">stroke-width</span>=<span class="s">"1.8"</span>
+        <span class="k">stroke-linecap</span>=<span class="s">"round"</span>
+        <span class="k">stroke-linejoin</span>=<span class="s">"round"</span><span class="t">/&gt;</span>
+<span class="t">&lt;/svg&gt;</span></pre>
+  </section>
+
+</div>
+</body>
+</html>

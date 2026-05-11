@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-navy: #01406D;
+  --color-teal: #01B4BA;
+  --color-ice: #F5FEFE;
+  --color-orange: #FF7A0F;
+  --color-ink: #0E1B26;
+  --color-ink2: #5A6B78;
+  --color-ink3: #92A1AE;
+  --color-line: #E3EEF1;
+
+  --font-heading: var(--font-be-vietnam-pro), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+}
+
+html {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-ice);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
