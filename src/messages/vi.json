@@ -3,5 +3,18 @@
     "title": "Zmenu",
     "tagline": "Quản lý menu & đặt hàng cho SME",
     "welcome": "Chào mừng đến với Zmenu"
+  },
+  "Menu": {
+    "open": "Đang mở",
+    "table": "Bàn {table}",
+    "tableNone": "Chưa chọn bàn",
+    "searchPlaceholder": "Tìm món...",
+    "all": "Tất cả",
+    "loading": "Đang tải...",
+    "empty": "Không có món phù hợp",
+    "error": "Không thể tải menu",
+    "flashDefault": "Flash Deal",
+    "cartItems": "{count} món",
+    "checkout": "Đặt ngay"
   }
 }

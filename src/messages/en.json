@@ -3,5 +3,18 @@
     "title": "Zmenu",
     "tagline": "Menu & ordering for SMEs",
     "welcome": "Welcome to Zmenu"
+  },
+  "Menu": {
+    "open": "Open",
+    "table": "Table {table}",
+    "tableNone": "No table",
+    "searchPlaceholder": "Search...",
+    "all": "All",
+    "loading": "Loading...",
+    "empty": "No products match",
+    "error": "Failed to load menu",
+    "flashDefault": "Flash Deal",
+    "cartItems": "{count} items",
+    "checkout": "Order now"
   }
 }
