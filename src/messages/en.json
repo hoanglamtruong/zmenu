@@ -16,5 +16,23 @@
     "flashDefault": "Flash Deal",
     "cartItems": "{count} items",
     "checkout": "Order now"
+  },
+  "Checkout": {
+    "title": "Confirm order",
+    "tableLabel": "Table",
+    "table": "Table {table} · Auto · QR",
+    "tableNone": "Take away",
+    "items": "Selected items",
+    "noteLabel": "Additional note",
+    "notePlaceholder": "e.g. less spicy, no onion...",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "codNote": "Pay on delivery · COD",
+    "submit": "Order now",
+    "submitting": "Submitting...",
+    "loading": "Loading...",
+    "empty": "Your cart is empty",
+    "backToMenu": "Back to menu",
+    "error": "Could not create order. Please try again."
   }
 }

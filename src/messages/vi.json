@@ -16,5 +16,23 @@
     "flashDefault": "Flash Deal",
     "cartItems": "{count} món",
     "checkout": "Đặt ngay"
+  },
+  "Checkout": {
+    "title": "Xác nhận đơn",
+    "tableLabel": "Bàn",
+    "table": "Bàn {table} · Tự động · QR",
+    "tableNone": "Mang về",
+    "items": "Món đã chọn",
+    "noteLabel": "Ghi chú thêm",
+    "notePlaceholder": "Ví dụ: ít cay, không hành...",
+    "subtotal": "Tạm tính",
+    "total": "Tổng",
+    "codNote": "Thanh toán khi nhận món · COD",
+    "submit": "Đặt ngay",
+    "submitting": "Đang gửi...",
+    "loading": "Đang tải...",
+    "empty": "Giỏ hàng trống",
+    "backToMenu": "Quay lại menu",
+    "error": "Không thể tạo đơn. Vui lòng thử lại."
   }
 }
