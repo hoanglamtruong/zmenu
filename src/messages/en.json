@@ -34,5 +34,21 @@
     "empty": "Your cart is empty",
     "backToMenu": "Back to menu",
     "error": "Could not create order. Please try again."
+  },
+  "OrderStatus": {
+    "orderNo": "Order ID",
+    "table": "Table {table}",
+    "tableNone": "Take away",
+    "step1": "Received",
+    "step2": "Preparing",
+    "step3": "Ready",
+    "step4": "Completed",
+    "items": "Items ordered",
+    "total": "Total",
+    "codNote": "Pay on delivery · COD",
+    "orderMore": "Order more",
+    "loading": "Loading...",
+    "notFound": "Order not found",
+    "missing": "Missing order ID"
   }
 }

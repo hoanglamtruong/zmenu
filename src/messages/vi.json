@@ -34,5 +34,21 @@
     "empty": "Giỏ hàng trống",
     "backToMenu": "Quay lại menu",
     "error": "Không thể tạo đơn. Vui lòng thử lại."
+  },
+  "OrderStatus": {
+    "orderNo": "Mã đơn",
+    "table": "Bàn {table}",
+    "tableNone": "Mang về",
+    "step1": "Đã nhận đơn",
+    "step2": "Đang chuẩn bị",
+    "step3": "Sẵn sàng",
+    "step4": "Hoàn thành",
+    "items": "Món đã đặt",
+    "total": "Tổng",
+    "codNote": "Thanh toán khi nhận món · COD",
+    "orderMore": "Đặt thêm",
+    "loading": "Đang tải...",
+    "notFound": "Không tìm thấy đơn",
+    "missing": "Thiếu mã đơn"
   }
 }
