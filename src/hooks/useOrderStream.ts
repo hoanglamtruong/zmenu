@@ -21,7 +21,7 @@ export function useOrderStream(
   }, [onChange]);
 
   useEffect(() => {
-    if (!tenantId || !orderId) return;
+    if (!tenantId) return;
     if (typeof window === "undefined" || typeof EventSource === "undefined") {
       return;
     }
@@ -32,7 +32,7 @@ export function useOrderStream(
     es.onmessage = (ev) => {
       try {
         const payload = JSON.parse(ev.data) as OrderStreamPayload;
-        if (payload.order_id && payload.order_id !== orderId) return;
+        if (orderId && payload.order_id && payload.order_id !== orderId) return;
         onChangeRef.current(payload);
       } catch {
         // ignore malformed
