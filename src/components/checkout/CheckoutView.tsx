@@ -2,7 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { OrderSummary } from "./OrderSummary";
+import {
+  IcArrow,
+  IcBack,
+  IcCard,
+  IcCheck,
+  IcPin,
+  IcPlus,
+  ItemPh,
+} from "@/components/mockup/icons";
 
 type Product = {
   id: string;
@@ -18,6 +26,8 @@ type LineItem = {
   price: number;
   image_url: string | null;
   quantity: number;
+  hue: number;
+  ph: string;
 };
 
 type Cart = Record<string, number>;
@@ -90,7 +100,7 @@ export function CheckoutView({ tenantId, tableId }: Props) {
         if (!cancelled) setProducts(Array.isArray(data) ? data : []);
       })
       .catch(() => {
-        // fallback handled by empty product state
+        // fall through
       })
       .finally(() => {
         if (!cancelled) setLoadingProducts(false);
@@ -102,32 +112,42 @@ export function CheckoutView({ tenantId, tableId }: Props) {
 
   const lineItems = useMemo<LineItem[]>(() => {
     const out: LineItem[] = [];
+    let i = 0;
     for (const [id, quantity] of Object.entries(cart)) {
       const p = products.find((x) => x.id === id);
-      if (!p) continue;
+      if (!p) {
+        i += 1;
+        continue;
+      }
       out.push({
         id,
         name: locale === "en" ? p.name_en || p.name_vi : p.name_vi || p.name_en,
         price: Number(p.price),
         image_url: p.image_url,
         quantity,
+        hue: i % 4,
+        ph: String.fromCharCode(65 + (i % 26)),
       });
+      i += 1;
     }
     return out;
   }, [cart, products, locale]);
 
-  const total = lineItems.reduce((s, it) => s + it.price * it.quantity, 0);
+  const subtotal = lineItems.reduce(
+    (s, it) => s + it.price * it.quantity,
+    0
+  );
+  const serviceFee = 0;
+  const promo = 0;
+  const total = subtotal + serviceFee - promo;
 
   function changeQty(id: string, delta: number) {
     setCart((c) => {
       const next: Cart = { ...c };
       const cur = next[id] ?? 0;
       const after = cur + delta;
-      if (after <= 0) {
-        delete next[id];
-      } else {
-        next[id] = after;
-      }
+      if (after <= 0) delete next[id];
+      else next[id] = after;
       return next;
     });
   }
@@ -162,13 +182,14 @@ export function CheckoutView({ tenantId, tableId }: Props) {
     }
   }
 
+  const locationDisplay = tableId ? `[${tableId}]` : "[Mã vị trí]";
   const isCartEmpty = cartReady && !loadingProducts && lineItems.length === 0;
 
   if (isCartEmpty) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-ice p-8">
+      <main className="flex min-h-screen items-center justify-center bg-ice p-8 font-body text-ink">
         <div className="max-w-xs text-center">
-          <p className="mb-4 text-ink2">{t("empty")}</p>
+          <p className="mb-4 text-sm text-ink2">{t("empty")}</p>
           <a
             href={menuHref(locale, tenantId, tableId)}
             className="inline-block rounded-full bg-navy px-5 py-2 text-sm font-semibold text-white"
@@ -181,141 +202,207 @@ export function CheckoutView({ tenantId, tableId }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-ice pb-32">
-      <header className="sticky top-0 z-20 border-b border-line bg-white">
-        <div className="mx-auto flex max-w-[430px] items-center gap-3 px-4 py-3">
-          <a
-            href={menuHref(locale, tenantId, tableId)}
-            aria-label={t("backToMenu")}
-            className="text-2xl leading-none text-navy"
-          >
-            ←
-          </a>
-          <h1 className="flex-1 font-heading text-base font-semibold text-ink">
-            {t("title")}
-          </h1>
+    <main className="relative min-h-screen bg-ice pb-40 font-body text-ink">
+      {/* Top bar */}
+      <div className="flex items-center justify-between bg-ice px-3.5 pb-3 pt-1.5">
+        <a
+          href={menuHref(locale, tenantId, tableId)}
+          aria-label={t("backToMenu")}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white"
+        >
+          <IcBack />
+        </a>
+        <div className="font-heading text-[16px] font-bold text-ink">
+          {t("title")}
         </div>
-      </header>
+        <div className="h-9 w-9" />
+      </div>
 
-      <section className="mx-auto max-w-[430px] space-y-4 px-4 py-4">
-        <div className="rounded-2xl border border-line bg-white p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-ink3">
-            {t("tableLabel")}
-          </p>
-          <p className="mt-1 text-sm font-medium text-ink">
-            {tableId ? t("table", { table: tableId }) : t("tableNone")}
-          </p>
-        </div>
-
-        <div className="space-y-3 rounded-2xl border border-line bg-white p-4">
-          <h2 className="text-[11px] font-semibold uppercase tracking-wide text-ink3">
-            {t("items")}
-          </h2>
-          {loadingProducts && lineItems.length === 0 ? (
-            <p className="py-4 text-center text-sm text-ink3">
-              {t("loading")}
-            </p>
-          ) : (
-            lineItems.map((it) => (
-              <div key={it.id} className="flex items-center gap-3">
-                <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-ice">
-                  {it.image_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={it.image_url}
-                      alt={it.name}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs text-ink3">
-                      —
-                    </div>
-                  )}
+      <section className="px-4">
+        {/* Items list card */}
+        <div className="rounded-2xl bg-white p-1 shadow-[0_1px_2px_rgba(1,64,109,0.04),0_4px_16px_rgba(1,64,109,0.05)]">
+          {lineItems.map((it, i) => (
+            <div
+              key={it.id}
+              className={
+                "flex items-center gap-3 p-3 " +
+                (i ? "border-t border-line" : "")
+              }
+            >
+              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl">
+                {it.image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={it.image_url}
+                    alt={it.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <ItemPh label={it.ph} height={56} hue={it.hue} />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[13.5px] font-semibold text-ink">
+                  {it.name}
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="line-clamp-1 text-sm font-medium text-ink">
-                    {it.name}
-                  </p>
-                  <p className="text-sm font-semibold text-orange">
-                    {formatVnd(it.price)}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => changeQty(it.id, -1)}
-                    aria-label="Decrease"
-                    className="flex h-7 w-7 items-center justify-center rounded-full border border-navy text-base leading-none text-navy active:scale-95"
-                  >
-                    −
-                  </button>
-                  <span className="w-6 text-center text-sm font-semibold tabular-nums">
-                    {it.quantity}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => changeQty(it.id, 1)}
-                    aria-label="Increase"
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-navy text-base leading-none text-white active:scale-95"
-                  >
-                    +
-                  </button>
+                <div className="mt-0.5 text-[11.5px] text-ink2">
+                  {t("standardOption")}
                 </div>
               </div>
-            ))
-          )}
+              <div className="flex items-center gap-2.5 rounded-full border border-line bg-ice px-1.5 py-1">
+                <button
+                  type="button"
+                  onClick={() => changeQty(it.id, -1)}
+                  aria-label="Decrease"
+                  className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-line bg-white text-sm font-bold text-ink2 active:scale-95"
+                >
+                  −
+                </button>
+                <div className="min-w-[12px] text-center text-[13px] font-bold">
+                  {it.quantity}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => changeQty(it.id, 1)}
+                  aria-label="Increase"
+                  className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-navy active:scale-95"
+                >
+                  <IcPlus size={12} />
+                </button>
+              </div>
+              <div className="min-w-[60px] text-right font-heading text-[13.5px] font-bold text-ink">
+                {formatVnd(it.price * it.quantity)}
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="rounded-2xl border border-line bg-white p-4">
-          <label
-            htmlFor="customer-note"
-            className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-ink3"
-          >
-            {t("noteLabel")}
-          </label>
+        {/* Location code */}
+        <div className="mt-4">
+          <div className="mb-2 flex items-baseline justify-between">
+            <div className="text-[12.5px] font-semibold text-ink2">
+              {t("locationCode")}
+            </div>
+            <div className="text-[10px] italic text-ink3">
+              {t("locationHint")}
+            </div>
+          </div>
+          <div className="flex items-center justify-between rounded-xl border border-line bg-white px-3.5 py-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E0F6F7]">
+                <IcPin size={14} />
+              </div>
+              <div className="font-heading text-[16px] font-bold text-navy">
+                {locationDisplay}
+              </div>
+            </div>
+            <div className="rounded-full bg-[#E0F6F7] px-2 py-1 text-[10.5px] font-semibold text-teal">
+              {t("locationAuto")}
+            </div>
+          </div>
+        </div>
+
+        {/* Note */}
+        <div className="mt-3.5">
+          <div className="mb-2 flex items-baseline justify-between">
+            <div className="text-[12.5px] font-semibold text-ink2">
+              {t("noteLabel")}
+            </div>
+            <div className="text-[11px] text-ink3">{t("noteOptional")}</div>
+          </div>
           <textarea
-            id="customer-note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
             placeholder={t("notePlaceholder")}
-            className="w-full rounded-xl border border-line bg-ice px-3 py-2 text-sm placeholder:text-ink3 focus:border-navy focus:outline-none"
+            className="min-h-[64px] w-full rounded-xl border border-line bg-white px-3.5 py-3 text-[13px] text-ink placeholder:text-ink3 focus:outline-none"
           />
         </div>
 
-        <OrderSummary
-          items={lineItems.map((it) => ({
-            name: it.name,
-            quantity: it.quantity,
-            price: it.price,
-          }))}
-          total={total}
-          subtotalLabel={t("subtotal")}
-          totalLabel={t("total")}
-        />
+        {/* Payment: COD */}
+        <div className="mt-3.5">
+          <div className="mb-2 text-[12.5px] font-semibold text-ink2">
+            {t("payment")}
+          </div>
+          <div className="flex items-center gap-3 rounded-xl border-[1.5px] border-teal bg-white p-3.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-[9px] bg-[#E0F6F7]">
+              <IcCard size={20} />
+            </div>
+            <div className="flex-1">
+              <div className="font-heading text-[14px] font-bold text-ink">
+                {t("codTitle")}
+              </div>
+              <div className="mt-0.5 text-[11.5px] text-ink2">
+                {t("codSub")}
+              </div>
+            </div>
+            <div className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-teal">
+              <IcCheck size={13} />
+            </div>
+          </div>
+        </div>
 
-        <p className="text-center text-xs text-ink2">{t("codNote")}</p>
+        {/* Summary */}
+        <div className="mt-4 rounded-2xl border border-line bg-white px-4 py-3.5">
+          <SummaryRow
+            label={t("subtotalLabel", { count: lineItems.length })}
+            value={formatVnd(subtotal)}
+          />
+          <SummaryRow label={t("serviceFee")} value={formatVnd(serviceFee)} />
+          {promo > 0 && (
+            <SummaryRow
+              label={t("promo")}
+              value={`−${formatVnd(promo)}`}
+              tone="teal"
+            />
+          )}
+          <div className="my-2.5 h-px bg-line" />
+          <div className="flex items-baseline justify-between">
+            <span className="text-[13px] text-ink2">{t("total")}</span>
+            <span className="font-heading text-[22px] font-bold text-orange">
+              {formatVnd(total)}
+            </span>
+          </div>
+        </div>
 
         {error && (
-          <p className="text-center text-sm text-orange">{t("error")}</p>
+          <p className="mt-3 text-center text-sm text-orange">{t("error")}</p>
         )}
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 pb-[env(safe-area-inset-bottom)]">
-        <div className="mx-auto max-w-[430px] px-4 pb-3">
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={submitting || lineItems.length === 0}
-            className="w-full rounded-2xl bg-orange py-3 text-base font-semibold text-white shadow-lg transition active:scale-[0.99] disabled:opacity-50"
-          >
-            {submitting
-              ? t("submitting")
-              : `${t("submit")} · ${formatVnd(total)} →`}
-          </button>
-        </div>
+      {/* Fixed CTA */}
+      <div className="fixed inset-x-0 bottom-0 border-t border-line bg-white px-4 pb-[30px] pt-3">
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={submitting || lineItems.length === 0}
+          className="flex w-full items-center justify-center gap-2 rounded-[14px] bg-navy py-[15px] font-heading text-[15.5px] font-bold text-white shadow-[0_10px_24px_rgba(1,64,109,0.28)] disabled:opacity-50"
+        >
+          {submitting
+            ? t("submitting")
+            : `${t("orderNow")} · ${formatVnd(total)}`}
+          {!submitting && <IcArrow size={15} />}
+        </button>
       </div>
     </main>
+  );
+}
+
+function SummaryRow({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone?: "teal";
+}) {
+  const color = tone === "teal" ? "text-teal" : "text-ink2";
+  return (
+    <div className={`flex justify-between py-1 text-[13px] ${color}`}>
+      <span>{label}</span>
+      <span className="font-semibold">{value}</span>
+    </div>
   );
 }

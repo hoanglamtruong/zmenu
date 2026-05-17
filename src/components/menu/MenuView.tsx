@@ -2,9 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { CategoryChip } from "./CategoryChip";
-import { ProductCard } from "./ProductCard";
-import { StickyCartBar } from "./StickyCartBar";
+import {
+  IcArrow,
+  IcCart,
+  IcPlus,
+  IcQr,
+  IcSearch,
+  IcTag,
+  ItemPh,
+  ZLogo,
+} from "@/components/mockup/icons";
 
 type Product = {
   id: string;
@@ -30,6 +37,11 @@ type Props = {
 const CART_STORAGE_PREFIX = "zmenu_cart";
 const ALL_CATEGORY = "__all__";
 
+function formatVnd(n: number | string): string {
+  const num = typeof n === "number" ? n : Number(n);
+  return `${new Intl.NumberFormat("vi-VN").format(num)}đ`;
+}
+
 export function MenuView({ tenantId, tableId }: Props) {
   const t = useTranslations("Menu");
   const locale = useLocale();
@@ -40,6 +52,7 @@ export function MenuView({ tenantId, tableId }: Props) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
   const [cart, setCart] = useState<Cart>({});
+  const [cartReady, setCartReady] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -75,9 +88,11 @@ export function MenuView({ tenantId, tableId }: Props) {
     } catch {
       // ignore
     }
+    setCartReady(true);
   }, [tenantId]);
 
   useEffect(() => {
+    if (!cartReady) return;
     try {
       window.localStorage.setItem(
         `${CART_STORAGE_PREFIX}:${tenantId}`,
@@ -86,7 +101,7 @@ export function MenuView({ tenantId, tableId }: Props) {
     } catch {
       // ignore
     }
-  }, [cart, tenantId]);
+  }, [cart, tenantId, cartReady]);
 
   const categories = useMemo(() => {
     const map = new Map<string, { id: string; label: string }>();
@@ -132,62 +147,98 @@ export function MenuView({ tenantId, tableId }: Props) {
     setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
   }
 
-  function handleCheckout() {
+  function checkoutHref() {
     const qs = new URLSearchParams({ tenant_id: tenantId });
     if (tableId) qs.set("table_id", tableId);
-    window.location.assign(`/${locale}/checkout?${qs.toString()}`);
+    return `/${locale}/checkout?${qs.toString()}`;
   }
 
+  // Placeholder labels follow the mockup's white-label convention so the UI
+  // matches even before tenant/table data is wired in.
+  const tenantDisplay = tenantId || "[Tên Cửa Hàng]";
+  const locationDisplay = tableId ? `[${tableId}]` : "[Mã vị trí]";
+
   return (
-    <main className="min-h-screen bg-ice pb-28">
-      <header className="sticky top-0 z-20 border-b border-line bg-white">
-        <div className="mx-auto flex max-w-[430px] items-center gap-3 px-4 py-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy font-heading font-bold text-white">
-            {tenantId.slice(0, 1).toUpperCase()}
+    <main className="relative min-h-screen bg-ice pb-32 font-body text-ink">
+      {/* Header (navy curved bottom) */}
+      <header className="rounded-b-[22px] bg-navy px-4 pb-3.5 pt-2.5 text-white">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <div className="flex items-center rounded-lg bg-white px-2 py-1.5">
+              <ZLogo width={66} />
+            </div>
+            <div className="min-w-0">
+              <div className="truncate font-heading text-[14px] font-bold leading-tight">
+                {tenantDisplay}
+              </div>
+              <div className="mt-1 flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F8EE] px-2 py-[2px] text-[10.5px] font-semibold text-[#16A34A]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
+                  {t("open")}
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10.5px] text-white/70">
+                  <IcQr size={11} color="rgba(255,255,255,0.7)" />
+                  {locationDisplay}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate font-heading text-sm font-semibold text-ink">
-              {tenantId}
-            </p>
-            <p className="text-[11px] text-ink2">
-              {tableId ? t("table", { table: tableId }) : t("tableNone")}
-            </p>
+          <div className="flex rounded-full border border-white/20 bg-white/15 p-[3px]">
+            <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-navy">
+              VI
+            </span>
+            <a
+              href={`/${locale === "vi" ? "en" : "vi"}/menu?tenant_id=${encodeURIComponent(
+                tenantId
+              )}${tableId ? `&table_id=${encodeURIComponent(tableId)}` : ""}`}
+              className="rounded-full px-2.5 py-1 text-[11px] font-semibold text-white/85"
+            >
+              {locale === "vi" ? "EN" : "VI"}
+            </a>
           </div>
-          <span className="rounded-full bg-teal/10 px-2 py-1 text-[10px] font-semibold uppercase text-teal">
-            ● {t("open")}
-          </span>
         </div>
 
-        <div className="mx-auto max-w-[430px] px-4 pb-3">
+        <div className="mt-3.5 flex items-center gap-2 rounded-xl bg-white px-3 py-2.5">
+          <IcSearch size={16} />
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t("searchPlaceholder")}
-            className="w-full rounded-xl border border-line bg-ice px-4 py-2.5 text-sm placeholder:text-ink3 focus:border-navy focus:outline-none"
+            className="flex-1 bg-transparent text-[13.5px] text-ink placeholder:text-ink3 focus:outline-none"
           />
-        </div>
-
-        <div className="mx-auto max-w-[430px] overflow-x-auto px-4 pb-3">
-          <div className="flex w-max gap-2">
-            <CategoryChip
-              name={t("all")}
-              isSelected={activeCategory === ALL_CATEGORY}
-              onClick={() => setActiveCategory(ALL_CATEGORY)}
-            />
-            {categories.map((c) => (
-              <CategoryChip
-                key={c.id}
-                name={c.label}
-                isSelected={activeCategory === c.id}
-                onClick={() => setActiveCategory(c.id)}
-              />
-            ))}
-          </div>
         </div>
       </header>
 
-      <section className="mx-auto max-w-[430px] px-4 py-4">
+      {/* Category chips */}
+      <div className="flex gap-2 overflow-x-auto px-4 pb-1.5 pt-3.5">
+        <CategoryChip
+          label={t("all")}
+          active={activeCategory === ALL_CATEGORY}
+          onClick={() => setActiveCategory(ALL_CATEGORY)}
+        />
+        {categories.map((c) => (
+          <CategoryChip
+            key={c.id}
+            label={c.label}
+            active={activeCategory === c.id}
+            onClick={() => setActiveCategory(c.id)}
+          />
+        ))}
+      </div>
+
+      {/* Section header */}
+      <div className="flex items-baseline justify-between px-4 pb-2.5 pt-3.5">
+        <h2 className="font-heading text-[17px] font-bold text-ink">
+          {t("popular")}
+        </h2>
+        <span className="text-[12px] font-semibold text-teal">
+          {t("seeAll")}
+        </span>
+      </div>
+
+      {/* Product grid */}
+      <section className="px-4 pb-2">
         {loading && (
           <p className="py-12 text-center text-sm text-ink3">{t("loading")}</p>
         )}
@@ -199,33 +250,121 @@ export function MenuView({ tenantId, tableId }: Props) {
         )}
         {!loading && !error && visible.length > 0 && (
           <div className="grid grid-cols-2 gap-3">
-            {visible.map((p) => (
-              <ProductCard
-                key={p.id}
-                id={p.id}
-                name_vi={p.name_vi}
-                name_en={p.name_en}
-                price={p.price}
-                image_url={p.image_url}
-                is_flash_deal={p.is_flash_deal}
-                flash_name={p.flash_name}
-                flash_ends_at={p.flash_ends_at}
-                locale={locale}
-                flashFallbackLabel={t("flashDefault")}
-                onAdd={addToCart}
-              />
-            ))}
+            {visible.map((p, i) => {
+              const name =
+                locale === "en"
+                  ? p.name_en || p.name_vi
+                  : p.name_vi || p.name_en;
+              const flashLabel =
+                p.flash_name?.trim() || t("flashDefault");
+              return (
+                <div
+                  key={p.id}
+                  className="rounded-2xl bg-white p-2 shadow-[0_1px_2px_rgba(1,64,109,0.04),0_4px_16px_rgba(1,64,109,0.05)]"
+                >
+                  <div className="relative">
+                    {p.image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={p.image_url}
+                        alt={name}
+                        loading="lazy"
+                        className="h-[120px] w-full rounded-xl object-cover"
+                      />
+                    ) : (
+                      <ItemPh
+                        label={`PRODUCT · ${String.fromCharCode(65 + (i % 26))}`}
+                        height={120}
+                        hue={i}
+                      />
+                    )}
+                    {p.is_flash_deal && (
+                      <div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-full bg-orange px-1.5 py-[3px] text-[10px] font-bold uppercase text-white shadow-[0_2px_6px_rgba(255,122,15,0.4)]">
+                        <IcTag size={10} />
+                        {flashLabel}
+                      </div>
+                    )}
+                  </div>
+                  <div className="px-1 pb-1 pt-2">
+                    <div className="min-h-[34px] text-[13.5px] font-semibold leading-tight text-ink line-clamp-2">
+                      {name}
+                    </div>
+                    <div className="mt-1.5 flex items-center justify-between">
+                      <div className="font-heading text-[14.5px] font-bold text-orange">
+                        {formatVnd(p.price)}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => addToCart(p.id)}
+                        aria-label="Add to cart"
+                        className="flex h-7 w-7 items-center justify-center rounded-full bg-navy shadow-[0_2px_6px_rgba(1,64,109,0.25)] active:scale-95"
+                      >
+                        <IcPlus size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
 
-      <StickyCartBar
-        itemCount={itemCount}
-        total={total}
-        onCheckout={handleCheckout}
-        itemsLabel={t("cartItems", { count: itemCount })}
-        checkoutLabel={t("checkout")}
-      />
+      {/* Floating cart bar */}
+      {itemCount > 0 && (
+        <div className="fixed inset-x-3 bottom-11 z-30">
+          <div className="flex items-center justify-between rounded-2xl bg-navy px-3.5 py-3 text-white shadow-[0_10px_30px_rgba(1,64,109,0.35)]">
+            <div className="flex items-center gap-2.5">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-[10px] bg-white/10">
+                <IcCart size={18} />
+                <div className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-orange px-1 text-[10px] font-bold text-white">
+                  {itemCount}
+                </div>
+              </div>
+              <div>
+                <div className="text-[11px] leading-none opacity-70">
+                  {t("cartItems", { count: itemCount })}
+                </div>
+                <div className="mt-0.5 font-heading text-[16px] font-bold">
+                  {formatVnd(total)}
+                </div>
+              </div>
+            </div>
+            <a
+              href={checkoutHref()}
+              className="flex items-center gap-1.5 rounded-xl bg-orange px-3.5 py-2.5 text-[13.5px] font-bold text-white"
+            >
+              {t("viewCart")}
+              <IcArrow size={14} />
+            </a>
+          </div>
+        </div>
+      )}
     </main>
+  );
+}
+
+function CategoryChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        "shrink-0 rounded-full px-3.5 py-2 text-[12.5px] font-semibold transition " +
+        (active
+          ? "bg-navy text-white"
+          : "border border-line bg-white text-ink")
+      }
+    >
+      {label}
+    </button>
   );
 }

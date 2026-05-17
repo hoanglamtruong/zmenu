@@ -35,7 +35,7 @@ export async function GET() {
       [tenantPgId]
     );
 
-    const pendingRes = await pool.query<{ count: number }>(
+    const pendingCountRes = await pool.query<{ count: number }>(
       `SELECT COUNT(*)::int AS count
        FROM products
        WHERE tenant_id = $1 AND status = 'pending'`,
@@ -79,12 +79,46 @@ export async function GET() {
       [tenantPgId]
     );
 
+    const pendingProductsRes = await pool.query(
+      `SELECT
+         p.id, p.name_vi, p.name_en,
+         (p.price)::float8 AS price,
+         p.image_url, p.created_at,
+         u.full_name AS staff_name,
+         u.email AS staff_email
+       FROM products p
+       LEFT JOIN users u ON u.id = p.created_by
+       WHERE p.tenant_id = $1 AND p.status = 'pending'
+       ORDER BY p.created_at DESC NULLS LAST
+       LIMIT 3`,
+      [tenantPgId]
+    );
+
+    const bestSellerRes = await pool.query<{
+      name_vi: string | null;
+      name_en: string | null;
+      qty: number;
+    }>(
+      `SELECT p.name_vi, p.name_en, SUM(oi.quantity)::int AS qty
+       FROM order_items oi
+       JOIN orders o ON o.id = oi.order_id
+       LEFT JOIN products p ON p.id = oi.product_id
+       WHERE o.tenant_id = $1 AND o.status = 'completed'
+         AND o.created_at >= CURRENT_DATE
+       GROUP BY p.id, p.name_vi, p.name_en
+       ORDER BY qty DESC NULLS LAST
+       LIMIT 1`,
+      [tenantPgId]
+    );
+
     return NextResponse.json({
       revenue_today: todayRes.rows[0]?.revenue_today ?? 0,
       orders_today: todayRes.rows[0]?.orders_today ?? 0,
-      pending_count: pendingRes.rows[0]?.count ?? 0,
+      pending_count: pendingCountRes.rows[0]?.count ?? 0,
+      best_seller: bestSellerRes.rows[0] ?? null,
       series: seriesRes.rows,
       recent_orders: recentRes.rows,
+      pending_products: pendingProductsRes.rows,
     });
   } catch (err) {
     console.error("[/api/admin/overview] error:", err);
