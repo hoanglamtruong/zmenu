@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  zmenu:
+    build: .
+    container_name: zmenu
+    ports:
+      - "8088:3000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - zos-network
+networks:
+  zos-network:
+    external: true
