@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
-  IcArrow,
-  IcCart,
   IcPlus,
   IcQr,
   IcSearch,
@@ -12,6 +10,12 @@ import {
   ItemPh,
   ZLogo,
 } from "@/components/mockup/icons";
+import { StickyCartBar } from "@/components/menu/StickyCartBar";
+import {
+  ProductDetailSheet,
+  type DetailProduct,
+} from "@/components/menu/ProductDetailSheet";
+import { CheckoutSheet } from "@/components/menu/CheckoutSheet";
 
 type Product = {
   id: string;
@@ -53,6 +57,9 @@ export function MenuView({ tenantId, tableId }: Props) {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
   const [cart, setCart] = useState<Cart>({});
   const [cartReady, setCartReady] = useState(false);
+  const [detailFor, setDetailFor] = useState<DetailProduct | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -143,24 +150,46 @@ export function MenuView({ tenantId, tableId }: Props) {
     return { itemCount: count, total: sum };
   }, [cart, products]);
 
-  function addToCart(id: string) {
-    setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
+  function addToCart(id: string, qty = 1) {
+    setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + qty }));
   }
 
-  function checkoutHref() {
-    const qs = new URLSearchParams({ tenant_id: tenantId });
-    if (tableId) qs.set("table_id", tableId);
-    return `/${locale}/checkout?${qs.toString()}`;
+  function openDetail(p: Product, index: number) {
+    const name =
+      locale === "en" ? p.name_en || p.name_vi : p.name_vi || p.name_en;
+    setDetailFor({
+      id: p.id,
+      name,
+      price: Number(p.price),
+      image_url: p.image_url,
+      is_flash_deal: p.is_flash_deal,
+      flash_name: p.flash_name,
+      hue: index % 4,
+      ph: `PRODUCT · ${String.fromCharCode(65 + (index % 26))}`,
+    });
+    setDetailOpen(true);
   }
 
-  // Placeholder labels follow the mockup's white-label convention so the UI
-  // matches even before tenant/table data is wired in.
+  function onOrderSubmitted(orderId: string) {
+    setCart({});
+    setCheckoutOpen(false);
+    try {
+      window.localStorage.removeItem(`${CART_STORAGE_PREFIX}:${tenantId}`);
+    } catch {
+      // ignore
+    }
+    window.location.assign(
+      `/${locale}/order-status?order_id=${encodeURIComponent(orderId)}`
+    );
+  }
+
+  // White-label placeholders match the v4 mockup until tenant data is wired.
   const tenantDisplay = tenantId || "[Tên Cửa Hàng]";
   const locationDisplay = tableId ? `[${tableId}]` : "[Mã vị trí]";
 
   return (
     <main className="relative min-h-screen bg-ice pb-32 font-body text-ink">
-      {/* Header (navy curved bottom) */}
+      {/* S01 Header (navy curved bottom) */}
       <header className="rounded-b-[22px] bg-navy px-4 pb-3.5 pt-2.5 text-white">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2.5">
@@ -255,12 +284,20 @@ export function MenuView({ tenantId, tableId }: Props) {
                 locale === "en"
                   ? p.name_en || p.name_vi
                   : p.name_vi || p.name_en;
-              const flashLabel =
-                p.flash_name?.trim() || t("flashDefault");
+              const flashLabel = p.flash_name?.trim() || t("flashDefault");
               return (
                 <div
                   key={p.id}
-                  className="rounded-2xl bg-white p-2 shadow-[0_1px_2px_rgba(1,64,109,0.04),0_4px_16px_rgba(1,64,109,0.05)]"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openDetail(p, i)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openDetail(p, i);
+                    }
+                  }}
+                  className="cursor-pointer rounded-2xl bg-white p-2 text-left shadow-[0_1px_2px_rgba(1,64,109,0.04),0_4px_16px_rgba(1,64,109,0.05)] transition active:scale-[0.98]"
                 >
                   <div className="relative">
                     {p.image_url ? (
@@ -273,7 +310,9 @@ export function MenuView({ tenantId, tableId }: Props) {
                       />
                     ) : (
                       <ItemPh
-                        label={`PRODUCT · ${String.fromCharCode(65 + (i % 26))}`}
+                        label={`PRODUCT · ${String.fromCharCode(
+                          65 + (i % 26)
+                        )}`}
                         height={120}
                         hue={i}
                       />
@@ -286,7 +325,7 @@ export function MenuView({ tenantId, tableId }: Props) {
                     )}
                   </div>
                   <div className="px-1 pb-1 pt-2">
-                    <div className="min-h-[34px] text-[13.5px] font-semibold leading-tight text-ink line-clamp-2">
+                    <div className="line-clamp-2 min-h-[34px] text-[13.5px] font-semibold leading-tight text-ink">
                       {name}
                     </div>
                     <div className="mt-1.5 flex items-center justify-between">
@@ -295,8 +334,11 @@ export function MenuView({ tenantId, tableId }: Props) {
                       </div>
                       <button
                         type="button"
-                        onClick={() => addToCart(p.id)}
                         aria-label="Add to cart"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(p.id, 1);
+                        }}
                         className="flex h-7 w-7 items-center justify-center rounded-full bg-navy shadow-[0_2px_6px_rgba(1,64,109,0.25)] active:scale-95"
                       >
                         <IcPlus size={14} />
@@ -310,36 +352,32 @@ export function MenuView({ tenantId, tableId }: Props) {
         )}
       </section>
 
-      {/* Floating cart bar */}
-      {itemCount > 0 && (
-        <div className="fixed inset-x-3 bottom-11 z-30">
-          <div className="flex items-center justify-between rounded-2xl bg-navy px-3.5 py-3 text-white shadow-[0_10px_30px_rgba(1,64,109,0.35)]">
-            <div className="flex items-center gap-2.5">
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-[10px] bg-white/10">
-                <IcCart size={18} />
-                <div className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-orange px-1 text-[10px] font-bold text-white">
-                  {itemCount}
-                </div>
-              </div>
-              <div>
-                <div className="text-[11px] leading-none opacity-70">
-                  {t("cartItems", { count: itemCount })}
-                </div>
-                <div className="mt-0.5 font-heading text-[16px] font-bold">
-                  {formatVnd(total)}
-                </div>
-              </div>
-            </div>
-            <a
-              href={checkoutHref()}
-              className="flex items-center gap-1.5 rounded-xl bg-orange px-3.5 py-2.5 text-[13.5px] font-bold text-white"
-            >
-              {t("viewCart")}
-              <IcArrow size={14} />
-            </a>
-          </div>
-        </div>
-      )}
+      {/* S03 — Sticky cart bar */}
+      <StickyCartBar
+        itemCount={itemCount}
+        total={total}
+        onCheckout={() => setCheckoutOpen(true)}
+      />
+
+      {/* S02 — Product detail bottom sheet */}
+      <ProductDetailSheet
+        product={detailFor}
+        open={detailOpen}
+        onClose={() => setDetailOpen(false)}
+        onAdd={addToCart}
+      />
+
+      {/* S04 — Checkout bottom sheet */}
+      <CheckoutSheet
+        open={checkoutOpen}
+        onClose={() => setCheckoutOpen(false)}
+        tenantId={tenantId}
+        tableId={tableId}
+        products={products}
+        cart={cart}
+        onChangeCart={setCart}
+        onSubmitted={onOrderSubmitted}
+      />
     </main>
   );
 }

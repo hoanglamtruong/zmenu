@@ -48,7 +48,26 @@
     "loading": "Đang tải...",
     "empty": "Giỏ hàng trống",
     "backToMenu": "Quay lại menu",
-    "error": "Không thể tạo đơn. Vui lòng thử lại."
+    "error": "Không thể tạo đơn. Vui lòng thử lại.",
+    "close": "Đóng",
+    "decrease": "Giảm",
+    "increase": "Tăng",
+    "liveIdle": "Realtime · chờ",
+    "liveConnecting": "Realtime · đang kết nối",
+    "liveLive": "Realtime · sẵn sàng",
+    "liveError": "Realtime · mất kết nối"
+  },
+  "ProductDetail": {
+    "close": "Đóng",
+    "description": "Phương án tiêu chuẩn cho sản phẩm này.",
+    "perUnit": "/ phần",
+    "optionsLabel": "Tùy chọn",
+    "required": "Bắt buộc",
+    "standardOption": "Phương án tiêu chuẩn",
+    "standardOptionSub": "Không phụ thu",
+    "decrease": "Giảm",
+    "increase": "Tăng",
+    "addToCart": "Thêm vào giỏ"
   },
   "OrderStatus": {
     "orderNo": "Mã đơn",

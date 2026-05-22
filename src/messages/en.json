@@ -48,7 +48,26 @@
     "loading": "Loading...",
     "empty": "Your cart is empty",
     "backToMenu": "Back to menu",
-    "error": "Could not create order. Please try again."
+    "error": "Could not create order. Please try again.",
+    "close": "Close",
+    "decrease": "Decrease",
+    "increase": "Increase",
+    "liveIdle": "Realtime · idle",
+    "liveConnecting": "Realtime · connecting",
+    "liveLive": "Realtime · live",
+    "liveError": "Realtime · disconnected"
+  },
+  "ProductDetail": {
+    "close": "Close",
+    "description": "Standard option for this product.",
+    "perUnit": "/ unit",
+    "optionsLabel": "Options",
+    "required": "Required",
+    "standardOption": "Standard option",
+    "standardOptionSub": "No surcharge",
+    "decrease": "Decrease",
+    "increase": "Increase",
+    "addToCart": "Add to cart"
   },
   "OrderStatus": {
     "orderNo": "Order ID",
