@@ -1,17 +1,8 @@
-import { useTranslations } from "next-intl";
+import { redirect } from "next/navigation";
 
-export default function HomePage() {
-  const t = useTranslations("Home");
+type Props = { params: Promise<{ locale: string }> };
 
-  return (
-    <main className="min-h-screen flex items-center justify-center p-8">
-      <div className="max-w-xl w-full text-center space-y-4">
-        <h1 className="font-heading text-4xl font-bold text-navy">
-          {t("title")}
-        </h1>
-        <p className="text-ink2 text-lg">{t("tagline")}</p>
-        <p className="text-ink3 text-sm">{t("welcome")}</p>
-      </div>
-    </main>
-  );
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  redirect(`/${locale}/menu?tenant_id=demo-fnb`);
 }
